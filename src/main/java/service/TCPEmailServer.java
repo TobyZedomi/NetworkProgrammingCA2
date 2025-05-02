@@ -2,6 +2,7 @@ package service;
 
 import com.google.gson.JsonObject;
 import model.EmailManager;
+import model.IEmailManager;
 import model.IUserManager;
 import model.UserManager;
 import network.TCPNetworkLayer;
@@ -67,7 +68,7 @@ public class TCPEmailServer implements Runnable {
                             }
                             break;
                         case UserUtilities.SEND_EMAIL:
-                            jsonResponse = sendEmail(loginStatus, action, jsonRequest, jsonResponse);
+                            jsonResponse = sendEmail(loginStatus, action, jsonRequest, emailManager);
                             break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.ACK);
@@ -98,7 +99,10 @@ public class TCPEmailServer implements Runnable {
         }
     }
 
-    private JsonObject sendEmail(boolean loginStatus, String action, JsonObject jsonRequest, JsonObject jsonResponse) {
+    private JsonObject sendEmail(boolean loginStatus, String action, JsonObject jsonRequest, IEmailManager emailManager) {
+
+        JsonObject jsonResponse = null;
+
         if (!loginStatus) {
 
             if (action.equalsIgnoreCase(UserUtilities.SEND_EMAIL)) {
@@ -143,7 +147,7 @@ public class TCPEmailServer implements Runnable {
         return jsonResponse;
     }
 
-    private static JsonObject registerUser(JsonObject jsonRequest, IUserManager userManager, EmailManager emailManager) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    private static JsonObject registerUser(JsonObject jsonRequest, IUserManager userManager, IEmailManager emailManager) throws InvalidKeySpecException, NoSuchAlgorithmException {
         //String jsonResponse;
         JsonObject jsonResponse = null;
         JsonObject payload = (JsonObject) jsonRequest.get("payload");

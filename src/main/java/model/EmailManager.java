@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class EmailManager {
+public class EmailManager implements IEmailManager {
     private Map<String, ArrayList<Email>> senderEmails = new ConcurrentHashMap<>();
     private Map<String, ArrayList<Email>> receiverEmails = new ConcurrentHashMap<>();
     private final Object emailCountLock = new Object();
