@@ -11,7 +11,7 @@ public class AuthUtils {
 
     public static final String SEND_EMAIL = "SEND_EMAIL";
 
-    public static final String EMAIL_SUCCESSFULLY_SENT = "{\"status\":\"EMAIL_SUCCESSFUL_SENT\"}";
+    public static final String EMAIL_SUCCESSFULLY_SENT = "{\"status\":\"EMAIL_SUCCESSFULLY_SENT\"}";
 
     public static final String ACK = "GOODBYE";
 

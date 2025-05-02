@@ -634,15 +634,14 @@ public class TCPGUIClient {
 
         if (response.equalsIgnoreCase(AuthUtils.EMAIL_SUCCESSFULLY_SENT)) {
 
-            JOptionPane.showMessageDialog(initialView, "You have successfully registered a user!", "Register Successful",
+            JOptionPane.showMessageDialog(initialView, response, "Register Successful",
                     JOptionPane.INFORMATION_MESSAGE);
-            mainFrame.remove(registerView);
-            showCountView();
+            mainFrame.remove(sendEmailView);
+            showSendEmailView();
 
-            usernameTextField1.setText("");
-            passwordTextField1.setText("");
-            confirmPasswordTextField1.setText("");
-            emailTextField.setText("");
+            receiverEmailTextField.setText("");
+            subjectTextField.setText("");
+            messageTextField.setText("");
 
             System.out.println(response);
             return;
