@@ -1,0 +1,22 @@
+package model;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
+public interface IUserManager {
+
+
+    boolean registerUser(String username, String password, String email);
+
+    boolean checkIfPasswordsAreTheSame(String password, String confirmPassword);
+
+    boolean checkIfPasswordsMatchRegex(String password, String confirmPassword);
+
+    boolean loginUser(String username, String password);
+
+    boolean checkIfUserExist(String username);
+
+    boolean checkIfEmailExist(String username, String email);
+
+    boolean checkIfEmailMatchRegex(String email);
+}
