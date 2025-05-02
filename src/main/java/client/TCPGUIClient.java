@@ -4,9 +4,6 @@ package client;
 import com.google.gson.JsonObject;
 import network.TCPNetworkLayer;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,12 +12,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class TCPGUIClient {
 
@@ -53,10 +47,10 @@ public class TCPGUIClient {
     private JButton countButton;
 
     private JButton logOut;
-    private JLabel userTextLabel;
-    private JTextField userTextField;
-    private JLabel userCountLabel;
-    private JTextField userCountField;
+
+    private JButton goBackToHomePage;
+
+    private JButton sendEmail;
 
 
     private JPanel registerView;
@@ -81,6 +75,27 @@ public class TCPGUIClient {
 
     private JTextField emailTextField;
 
+    // send Email
+
+    private JPanel sendEmailView;
+    private JButton sendEmailViewButton;
+
+
+    private JLabel receiverEmailLabel;
+
+    private JTextField receiverEmailTextField;
+
+    private JLabel subjectLabel;
+
+
+    private JTextField subjectTextField;
+
+
+    private JLabel messageLabel;
+
+
+    private JTextField messageTextField;
+
 
 
 
@@ -101,6 +116,9 @@ public class TCPGUIClient {
         // register view
 
         configureRegisterView();
+
+        // send an email Panel
+        configureSendEmailPanel();
 
     }
 
@@ -211,6 +229,8 @@ public class TCPGUIClient {
     }
 
     private void configureCountView(){
+
+
         // Create and configure the config panel
         // This will provide a view to take in the user credentials
         // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
@@ -218,23 +238,19 @@ public class TCPGUIClient {
         // Register this panel as a container in the system
         guiContainers.put("countCharView", countCharView);
 
-        // Create text fields and associated labels to take in username and password
-        // Username info
-        userTextLabel = new JLabel("Enter your text: ");
-        userTextField = new JTextField(15);
 
-        userCountLabel = new JLabel("What to count: ");
-        userCountField = new JTextField(15);
-        // Create a button to log in user
-        countButton = new JButton("Count occurrences");
+        // send email
+
+        sendEmail = new JButton("Send Email");
         // Specify what the button should DO when clicked:
-        countButton.addActionListener(new ActionListener() {
+        sendEmail.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //count();
-                System.out.println("Counting!!");
+                sendEmailPage();
             }
         });
+
+
 
         // logout
 
@@ -247,20 +263,11 @@ public class TCPGUIClient {
             }
         });
 
-        // Add credential components to count view panel in specific positions within the gridbag
-        // Add username label and text field on first row (y = 0)
-        countCharView.add(userTextLabel, getGridBagConstraints(0, 0, 1));
-        countCharView.add(userTextField, getGridBagConstraints(1, 0, 1));
-        // Add password label and text field on second row (y = 1)
-        countCharView.add(userCountLabel, getGridBagConstraints(0, 1, 1));
-        countCharView.add(userCountField, getGridBagConstraints(1, 1, 1));
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
-        countCharView.add(countButton, getGridBagConstraints(0, 2, 2));
+        countCharView.add(sendEmail, getGridBagConstraints(0, 2, 2));
 
-
-        // Add button on third row (y = 2) spanning two columns (width = 2)
-        countCharView.add(logOut, getGridBagConstraints(0, 4, 2));
+        countCharView.add(logOut, getGridBagConstraints(0, 3, 2));
     }
 
     private void showInitialView(){
@@ -304,9 +311,6 @@ public class TCPGUIClient {
         confirmPasswordTextField1 = new JTextField(15);
 
 
-        emailLabel = new JLabel("Enter email: ");
-        emailTextField = new JTextField(15);
-
         // Create a button to log in user
         registerViewButton = new JButton("Register");
         // Specify what the button should DO when clicked:
@@ -340,15 +344,12 @@ public class TCPGUIClient {
         registerView.add(confirmPasswordLabel1, getGridBagConstraints(0, 2, 1));
         registerView.add(confirmPasswordTextField1, getGridBagConstraints(1, 2, 1));
 
-        registerView.add(emailLabel,  getGridBagConstraints(0, 3, 1));
-        registerView.add(emailTextField, getGridBagConstraints(1, 3, 1));
-
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
-        registerView.add(registerViewButton, getGridBagConstraints(0, 4, 2));
+        registerView.add(registerViewButton, getGridBagConstraints(0, 3, 2));
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
-        registerView.add(logOut, getGridBagConstraints(0, 5, 2));
+        registerView.add(logOut, getGridBagConstraints(0, 4, 2));
     }
 
 
@@ -361,6 +362,95 @@ public class TCPGUIClient {
         mainFrame.setVisible(true);
     }
 
+
+
+
+
+    /// send an email Panel
+
+
+    // register View
+
+    private void configureSendEmailPanel(){
+        // Create and configure the config panel
+        // This will provide a view to take in the user credentials
+        // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
+        sendEmailView = new JPanel(new GridBagLayout());
+        // Register this panel as a container in the system
+        guiContainers.put("sendEmailView", sendEmailView);
+
+        // Create text fields and associated labels to take in username and password
+        // Username info
+        receiverEmailLabel = new JLabel("To: ");
+        receiverEmailTextField = new JTextField(15);
+
+        subjectLabel = new JLabel("Subject: ");
+        subjectTextField = new JTextField(15);
+
+
+        messageLabel = new JLabel("Message: ");
+        messageTextField = new JTextField(15);
+
+
+
+        // Create a button to log in user
+        sendEmailViewButton = new JButton("Send Email");
+        // Specify what the button should DO when clicked:
+        sendEmailViewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sendEmailToUser();
+            }
+        });
+
+
+        goBackToHomePage = new JButton("Go Back To Home Page");
+        // Specify what the button should DO when clicked:
+        goBackToHomePage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goBackToHomePageSendEmail();
+            }
+        });
+
+
+        logOut = new JButton("LogOut");
+        // Specify what the button should DO when clicked:
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logOutSendEmail();
+            }
+        });
+
+
+        sendEmailView.add(receiverEmailLabel, getGridBagConstraints(0, 0, 1));
+        sendEmailView.add(receiverEmailTextField, getGridBagConstraints(1, 0, 1));
+
+        sendEmailView.add(subjectLabel, getGridBagConstraints(0, 1, 1));
+        sendEmailView.add(subjectTextField, getGridBagConstraints(1, 1, 1));
+
+        sendEmailView.add(messageLabel, getGridBagConstraints(0, 2, 1));
+        sendEmailView.add(messageTextField, getGridBagConstraints(1, 2, 1));
+
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        sendEmailView.add(sendEmailViewButton, getGridBagConstraints(0, 3, 2));
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        sendEmailView.add(goBackToHomePage, getGridBagConstraints(0, 4, 2));
+        sendEmailView.add(logOut, getGridBagConstraints(0, 5, 2));
+    }
+
+
+    private void showSendEmailView(){
+
+        // Add config panel to the main window and make it visible
+        // mainFrame.remove(0);
+
+        mainFrame.add(sendEmailView);
+        mainFrame.setVisible(true);
+    }
 
 
 
@@ -440,6 +530,12 @@ public class TCPGUIClient {
         showInitialView();
     }
 
+    private void sendEmailPage(){
+
+        mainFrame.remove(countCharView);
+        showSendEmailView();
+    }
+
     private void goBackToLogin(){
 
         mainFrame.remove(registerView);
@@ -448,18 +544,34 @@ public class TCPGUIClient {
 
 
 
+    private void logOutSendEmail(){
+
+        mainFrame.remove(sendEmailView);
+        showInitialView();
+    }
+
+
+    private void goBackToHomePageSendEmail(){
+
+        mainFrame.remove(sendEmailView);
+        showCountView();
+    }
+
+
+
+
+
     private void setRegisterButton(){
         String username = usernameTextField1.getText();
         String password = passwordTextField1.getText();
         String confirmPassword = confirmPasswordTextField1.getText();
-        String email = emailTextField.getText();
 
 
         JsonObject payload = new JsonObject();
         payload.addProperty("username", username);
         payload.addProperty("password", password);
         payload.addProperty("confirmPassword", confirmPassword);
-        payload.addProperty("email", email);
+
 
         // Create the overall request object
         JsonObject requestJson = new JsonObject();
@@ -484,6 +596,52 @@ public class TCPGUIClient {
             usernameTextField1.setText("");
             passwordTextField1.setText("");
             confirmPasswordTextField1.setText("");
+
+            System.out.println(response);
+            return;
+
+        }
+        JOptionPane.showMessageDialog(initialView, response, "Register Failed",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+
+    // send Email
+
+    private void sendEmailToUser(){
+
+        String receiverEmail = receiverEmailTextField.getText();
+        String subject = subjectTextField.getText();
+        String message = messageTextField.getText();
+
+
+        JsonObject payload = new JsonObject();
+        payload.addProperty("receiver", receiverEmail);
+        payload.addProperty("subject", subject);
+        payload.addProperty("message", message);
+
+        // Create the overall request object
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.SEND_EMAIL);
+        requestJson.add("payload", payload);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        if (response.equalsIgnoreCase(AuthUtils.EMAIL_SUCCESSFULLY_SENT)) {
+
+            JOptionPane.showMessageDialog(initialView, "You have successfully registered a user!", "Register Successful",
+                    JOptionPane.INFORMATION_MESSAGE);
+            mainFrame.remove(registerView);
+            showCountView();
+
+            usernameTextField1.setText("");
+            passwordTextField1.setText("");
+            confirmPasswordTextField1.setText("");
             emailTextField.setText("");
 
             System.out.println(response);
@@ -492,6 +650,7 @@ public class TCPGUIClient {
         }
         JOptionPane.showMessageDialog(initialView, response, "Register Failed",
                 JOptionPane.ERROR_MESSAGE);
+
     }
 
     private void setStandardFonts(){

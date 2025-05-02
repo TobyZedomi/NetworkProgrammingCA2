@@ -4,17 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d89b0eef-2c5a-41f3-9f09-93903a3bc410" name="Changes" comment="Network Layer and User Utilities&#10;&#10;logback file">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/client/AuthUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/client/AuthUtils.java" afterDir="false" />
+    <list default="true" id="d89b0eef-2c5a-41f3-9f09-93903a3bc410" name="Changes" comment="Threaded tcp server adding email manager and email">
       <change beforePath="$PROJECT_DIR$/src/main/java/client/TCPGUIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/client/TCPGUIClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/EmailManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/EmailManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/IUserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/IUserManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/UserManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/TCPEmailServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/TCPEmailServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/ThreadedUserTCPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/ThreadedUserTCPServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/UserUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/UserUtilities.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +46,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.TCPGUIClient">
+  <component name="RunManager" selected="Application.ThreadedUserTCPServer">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="NetworkProgrammingCA2" />
@@ -109,7 +102,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1746167680507</updated>
-      <workItem from="1746167681550" duration="12784000" />
+      <workItem from="1746167681550" duration="13262000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -175,7 +168,39 @@
       <option name="project" value="LOCAL" />
       <updated>1746168610599</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Utils class for email dont exist, invalid date time, email send successfully, not logged in, and send email">
+      <option name="closed" value="true" />
+      <created>1746186533377</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1746186533377</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Updating the user and the usermanager for the username to be an email">
+      <option name="closed" value="true" />
+      <created>1746186561770</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1746186561770</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Email amanager class methods to add an email, check if email is regex, check if receiver email exist and some bootstrap">
+      <option name="closed" value="true" />
+      <created>1746186641921</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1746186641921</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Threaded tcp server adding email manager and email">
+      <option name="closed" value="true" />
+      <created>1746186677988</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1746186677988</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,6 +215,10 @@
     <MESSAGE value="Threading for email server" />
     <MESSAGE value="TCPEmailServer with json" />
     <MESSAGE value="Network Layer and User Utilities&#10;&#10;logback file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Network Layer and User Utilities&#10;&#10;logback file" />
+    <MESSAGE value="Utils class for email dont exist, invalid date time, email send successfully, not logged in, and send email" />
+    <MESSAGE value="Updating the user and the usermanager for the username to be an email" />
+    <MESSAGE value="Email amanager class methods to add an email, check if email is regex, check if receiver email exist and some bootstrap" />
+    <MESSAGE value="Threaded tcp server adding email manager and email" />
+    <option name="LAST_COMMIT_MESSAGE" value="Threaded tcp server adding email manager and email" />
   </component>
 </project>
