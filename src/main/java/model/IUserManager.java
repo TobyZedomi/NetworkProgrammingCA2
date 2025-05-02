@@ -6,7 +6,7 @@ import java.security.spec.InvalidKeySpecException;
 public interface IUserManager {
 
 
-    boolean registerUser(String username, String password, String email);
+    boolean registerUser(String username, String password);
 
     boolean checkIfPasswordsAreTheSame(String password, String confirmPassword);
 
@@ -15,8 +15,6 @@ public interface IUserManager {
     boolean loginUser(String username, String password);
 
     boolean checkIfUserExist(String username);
-
-    boolean checkIfEmailExist(String username, String email);
 
     boolean checkIfEmailMatchRegex(String email);
 }

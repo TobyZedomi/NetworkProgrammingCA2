@@ -34,9 +34,9 @@ public class UserManager implements IUserManager {
 
     // register User
 
-    public boolean registerUser(String username, String password, String email){
+    public boolean registerUser(String username, String password){
 
-        User userToBeRegistered = new User(username,hashPassword(password), email);
+        User userToBeRegistered = new User(username,hashPassword(password));
 
         return register(userToBeRegistered);
     }
@@ -81,24 +81,6 @@ public class UserManager implements IUserManager {
 
 
         return match;
-    }
-
-    // check if email exist
-
-    public boolean checkIfEmailExist(String username, String email){
-
-        boolean exist = false;
-
-
-        for (User u : users.values()){
-
-            if (u.getEmail().equals(email)){
-
-                exist = true;
-            }
-        }
-
-        return exist;
     }
 
 
@@ -151,9 +133,9 @@ public class UserManager implements IUserManager {
     {
 
 
-        users.put("user", new User("user", "$2a$12$x4EwpUD5VU.vJW1.xICz1OnEJqEMfdYx/ttl/Gi/JxljZAsguzqbi", "user1@gmail.com"));
-        users.put("user1", new User("user1", "$2a$12$x4EwpUD5VU.vJW1.xICz1OnEJqEMfdYx/ttl/Gi/JxljZAsguzqbi", "user1@gmail.com"));
-        users.put("user2", new User("user2", "$2a$12$x4EwpUD5VU.vJW1.xICz1OnEJqEMfdYx/ttl/Gi/JxljZAsguzqbi", "user2@gmail.com"));
+        users.put("user@gmail.com", new User("user@gmail.com", "$2a$12$x4EwpUD5VU.vJW1.xICz1OnEJqEMfdYx/ttl/Gi/JxljZAsguzqbi"));
+        users.put("user1@gmail.com", new User("user1@gmail.com", "$2a$12$x4EwpUD5VU.vJW1.xICz1OnEJqEMfdYx/ttl/Gi/JxljZAsguzqbi"));
+        users.put("user2@gmail.com", new User("user2@gmail.com", "$2a$12$x4EwpUD5VU.vJW1.xICz1OnEJqEMfdYx/ttl/Gi/JxljZAsguzqbi"));
 
     }
 
