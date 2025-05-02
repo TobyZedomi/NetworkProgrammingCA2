@@ -31,12 +31,12 @@ public class ThreadedUserTCPServer {
         try (ServerSocket connectionSocket = new ServerSocket(UserUtilities.PORT)){
             UserManager userManager = new UserManager();
             EmailManager emailManager = new EmailManager();
-            String email = new String();
+            String username = new String();
 
             boolean validServerSession = true;
             while(validServerSession){
                 Socket clientDataSocket = connectionSocket.accept();
-                TCPEmailServer clientHandler = new TCPEmailServer(clientDataSocket, userManager, emailManager, email);
+                TCPEmailServer clientHandler = new TCPEmailServer(clientDataSocket, userManager, emailManager, username);
                 clientHandlerPool.submit(clientHandler);
             }
         }catch (IOException e){
