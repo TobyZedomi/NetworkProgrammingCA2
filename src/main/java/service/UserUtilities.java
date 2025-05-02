@@ -12,6 +12,9 @@ public class UserUtilities {
 
     public static final String EXIT = "EXIT";
 
+    public static final String SEND_EMAIL = "SEND_EMAIL";
+
+
 
     // Responses
 
@@ -30,6 +33,15 @@ public class UserUtilities {
     public static final String USER_ALREADY_EXIST = "USER_ALREADY_EXIST";
 
     public static final String EMAIL_ALREADY_EXIST = "EMAIL_ALREADY_EXIST";
+
+    public static final String INVALID_DATE_TIME = "INVALID_DATE_TIME";
+
+    public static final String EMAIL_DONT_EXIST = "EMAIL_DONT_EXIST";
+
+    public static final String EMAIL_SUCCESSFULLY_SENT = "EMAIL_SUCCESSFULLY_SENT";
+
+    public static final String NOT_LOGGED_IN = "NOT_LOGGED_IN";
+
 
 
     public static final String ACK = "GOODBYE";

@@ -4,16 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d89b0eef-2c5a-41f3-9f09-93903a3bc410" name="Changes" comment="Initial Commit">
+    <list default="true" id="d89b0eef-2c5a-41f3-9f09-93903a3bc410" name="Changes" comment="Network Layer and User Utilities&#10;&#10;logback file">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/client/AuthUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/client/AuthUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/client/ClientCli.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/client/TCPGUIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/client/TCPGUIClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Email.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Email.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/EmailManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/EmailManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/IUserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/IUserManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/UserManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/TCPNetworkLayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/network/TCPNetworkLayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/TCPEmailServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/TCPEmailServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/ThreadedUserTCPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/ThreadedUserTCPServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/UserUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/UserUtilities.java" afterDir="false" />
@@ -55,7 +53,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.TCPGUIClient">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="NetworkProgrammingCA2" />
@@ -69,8 +67,36 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TCPGUIClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="client.TCPGUIClient" />
+      <module name="NetworkProgrammingCA2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ThreadedUserTCPServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="service.ThreadedUserTCPServer" />
+      <module name="NetworkProgrammingCA2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TCPGUIClient" />
+        <item itemvalue="Application.ThreadedUserTCPServer" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -83,7 +109,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1746167680507</updated>
-      <workItem from="1746167681550" duration="717000" />
+      <workItem from="1746167681550" duration="12784000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -93,7 +119,63 @@
       <option name="project" value="LOCAL" />
       <updated>1746167858134</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="GUI for login and register and AuthUtils">
+      <option name="closed" value="true" />
+      <created>1746168424421</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746168424421</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Email class and email manager">
+      <option name="closed" value="true" />
+      <created>1746168445797</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1746168445797</updated>
+    </task>
+    <task id="LOCAL-00004" summary="User class and user manager">
+      <option name="closed" value="true" />
+      <created>1746168460381</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746168460381</updated>
+    </task>
+    <task id="LOCAL-00005" summary="IUserManager class">
+      <option name="closed" value="true" />
+      <created>1746168531680</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746168531680</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Threading for email server">
+      <option name="closed" value="true" />
+      <created>1746168561621</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1746168561621</updated>
+    </task>
+    <task id="LOCAL-00007" summary="TCPEmailServer with json">
+      <option name="closed" value="true" />
+      <created>1746168585771</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1746168585771</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Network Layer and User Utilities&#10;&#10;logback file">
+      <option name="closed" value="true" />
+      <created>1746168610599</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1746168610599</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -101,6 +183,13 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit" />
+    <MESSAGE value="GUI for login and register and AuthUtils" />
+    <MESSAGE value="Email class and email manager" />
+    <MESSAGE value="User class and user manager" />
+    <MESSAGE value="IUserManager class" />
+    <MESSAGE value="Threading for email server" />
+    <MESSAGE value="TCPEmailServer with json" />
+    <MESSAGE value="Network Layer and User Utilities&#10;&#10;logback file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Network Layer and User Utilities&#10;&#10;logback file" />
   </component>
 </project>
