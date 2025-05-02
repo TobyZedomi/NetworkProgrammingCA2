@@ -1,5 +1,6 @@
 package service;
 
+import model.EmailManager;
 import model.UserManager;
 
 import java.io.IOException;
@@ -29,11 +30,13 @@ public class ThreadedUserTCPServer {
 
         try (ServerSocket connectionSocket = new ServerSocket(UserUtilities.PORT)){
             UserManager userManager = new UserManager();
+            EmailManager emailManager = new EmailManager();
+            String email = new String();
 
             boolean validServerSession = true;
             while(validServerSession){
                 Socket clientDataSocket = connectionSocket.accept();
-                TCPEmailServer clientHandler = new TCPEmailServer(clientDataSocket, userManager);
+                TCPEmailServer clientHandler = new TCPEmailServer(clientDataSocket, userManager, emailManager, email);
                 clientHandlerPool.submit(clientHandler);
             }
         }catch (IOException e){
