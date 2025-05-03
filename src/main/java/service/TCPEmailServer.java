@@ -72,6 +72,35 @@ public class TCPEmailServer implements Runnable {
                         case UserUtilities.RETRIEVE_EMAILS:
                             jsonResponse = retreiveEmails(loginStatus, emailManager);
                             break;
+                        case UserUtilities.SEARCH_RETRIEVED_EMAILS:
+
+                            if (!loginStatus) {
+
+                                JsonObject payload = (JsonObject) jsonRequest.get("payload");
+                                if (payload.size() == 1) {
+                                    String subject = payload.get("subject").getAsString();
+
+                                    ArrayList<Email> emailsForUserBasedOnSubject = emailManager.searchForRetrievedEmailsBasedOnSubject(username, subject);
+
+                                    if (!emailsForUserBasedOnSubject.isEmpty()) {
+                                        if (emailsForUserBasedOnSubject != null) {
+                                                jsonResponse = serializeEmails(emailsForUserBasedOnSubject);
+
+                                        } else {
+                                            jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                                        }
+                                    } else {
+                                        jsonResponse = createStatusResponse(UserUtilities.NO_EMAILS_WITH_THIS_SUBJECT);
+                                    }
+
+                                } else {
+                                    jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                                }
+                            } else {
+                                jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+                            }
+
+                            break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.ACK);
                             validClientSession = false;
@@ -160,6 +189,8 @@ public class TCPEmailServer implements Runnable {
                     } else {
                         jsonResponse = createStatusResponse(UserUtilities.INVALID_DATE_TIME);
                     }
+                } else {
+                    jsonResponse = createStatusResponse(UserUtilities.INVALID);
                 }
             }
         } else {
@@ -246,18 +277,18 @@ public class TCPEmailServer implements Runnable {
 
         StringJoiner joiner = new StringJoiner(UserUtilities.EMAIL_DELIMITER2);
 
-        for (Email e : emails){
+        for (Email e : emails) {
             joiner.add(serializeEmail(e));
-            jsonResponse = createStatusResponse2( joiner.toString());
+            jsonResponse = createStatusResponse2(joiner.toString());
         }
         return jsonResponse;
     }
 
-    public  String serializeEmail(Email m){
-        if(m == null){
+    public String serializeEmail(Email m) {
+        if (m == null) {
             throw new IllegalArgumentException("Cannot serialise null Movie");
         }
-        return "ID: " + m.getID() + UserUtilities.EMAIL_DELIMITER + "Sender: " + m.getSender()  + UserUtilities.EMAIL_DELIMITER + "Subject: " + m.getSubject() + UserUtilities.EMAIL_DELIMITER  + "Date: " + m.getTimeStamp().toLocalDate();
+        return "ID: " + m.getID() + UserUtilities.EMAIL_DELIMITER + "Sender: " + m.getSender() + UserUtilities.EMAIL_DELIMITER + "Subject: " + m.getSubject() + UserUtilities.EMAIL_DELIMITER + "Date: " + m.getTimeStamp().toLocalDate();
     }
 
 
@@ -267,7 +298,7 @@ public class TCPEmailServer implements Runnable {
         return invalidResponse;
     }
 
-    private JsonObject createStatusResponse2( String emails) {
+    private JsonObject createStatusResponse2(String emails) {
         JsonObject invalidResponse = new JsonObject();
         invalidResponse.addProperty("emails", emails);
         return invalidResponse;
