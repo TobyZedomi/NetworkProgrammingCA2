@@ -59,6 +59,8 @@ public class TCPGUIClient {
 
     private JButton getContentOfRetreivedEmails;
 
+    private JButton getContentOfSentEmails;
+
 
     private JPanel registerView;
     private JButton registerViewButton;
@@ -126,6 +128,15 @@ public class TCPGUIClient {
     private JTextField idTextField;
 
 
+    // get content of sent emails
+
+    private JPanel contentSentEmailsView;
+
+    private JButton getContentSentEmailsButton;
+
+    private JLabel id2Label;
+
+    private JTextField id2TextField;
 
     // Use constructor to establish the components (parts) of the GUI
     public TCPGUIClient() {
@@ -155,6 +166,9 @@ public class TCPGUIClient {
 
         configureGetContentRetreivedEmails();
 
+        // get content of sent emails
+
+        configureGetContentSentEmail();
 
     }
 
@@ -321,6 +335,17 @@ public class TCPGUIClient {
             }
         });
 
+        // get content of sent email
+
+        getContentOfSentEmails = new JButton("Get Content Of Particular sent Email ");
+        // Specify what the button should DO when clicked:
+        getContentOfSentEmails.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goToGetContentSentEmailPage();
+            }
+        });
+
 
         // logout
 
@@ -343,7 +368,9 @@ public class TCPGUIClient {
 
         countCharView.add(getContentOfRetreivedEmails, getGridBagConstraints(0, 5, 2));
 
-        countCharView.add(logOut, getGridBagConstraints(0, 6, 2));
+        countCharView.add(getContentOfSentEmails, getGridBagConstraints(0, 6, 2));
+
+        countCharView.add(logOut, getGridBagConstraints(0, 7, 2));
     }
 
     private void showInitialView(){
@@ -669,6 +696,79 @@ public class TCPGUIClient {
     }
 
 
+    // get content of sent emails
+
+
+
+    private void configureGetContentSentEmail(){
+        // Create and configure the config panel
+        // This will provide a view to take in the user credentials
+        // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
+        contentSentEmailsView = new JPanel(new GridBagLayout());
+        // Register this panel as a container in the system
+        guiContainers.put("contentSentEmailsView", contentSentEmailsView);
+
+
+        id2Label = new JLabel("Email ID: ");
+        id2TextField = new JTextField(15);
+
+
+        // Create a button to log in user
+        getContentSentEmailsButton = new JButton("Get Content");
+        // Specify what the button should DO when clicked:
+        getContentSentEmailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getContentSentEmail();
+            }
+        });
+
+
+        goBackToHomePage = new JButton("Go Back To Home Page");
+        // Specify what the button should DO when clicked:
+        goBackToHomePage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goBackToHomePageGetContentSent();
+            }
+        });
+
+
+        logOut = new JButton("LogOut");
+        // Specify what the button should DO when clicked:
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logOutGetContentSent();
+            }
+        });
+
+
+
+        contentSentEmailsView.add(id2Label, getGridBagConstraints(0, 1, 1));
+        contentSentEmailsView.add(id2TextField, getGridBagConstraints(1, 1, 1));
+
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        contentSentEmailsView.add(getContentSentEmailsButton, getGridBagConstraints(0, 2, 2));
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        contentSentEmailsView.add(goBackToHomePage, getGridBagConstraints(0, 3, 2));
+        contentSentEmailsView.add(logOut, getGridBagConstraints(0, 4, 2));
+    }
+
+
+    private void showGetContentSentView(){
+
+        // Add config panel to the main window and make it visible
+        // mainFrame.remove(0);
+
+        mainFrame.add(contentSentEmailsView);
+        mainFrame.setVisible(true);
+    }
+
+
+
 
     public void start() throws IOException {
         network = new TCPNetworkLayer(AuthUtils.SERVER_HOST, AuthUtils.SERVER_PORT);
@@ -763,6 +863,13 @@ public class TCPGUIClient {
        showGetContentRetreivedView();
     }
 
+    private void goToGetContentSentEmailPage(){
+
+        mainFrame.remove(countCharView);
+        showGetContentSentView();
+    }
+
+
     private void goBackToLogin(){
 
         mainFrame.remove(registerView);
@@ -790,6 +897,11 @@ public class TCPGUIClient {
         showInitialView();
     }
 
+    private void logOutGetContentSent(){
+
+        mainFrame.remove(contentSentEmailsView);
+        showInitialView();
+    }
 
 
     private void goBackToHomePageSendEmail(){
@@ -813,6 +925,11 @@ public class TCPGUIClient {
     }
 
 
+    private void goBackToHomePageGetContentSent(){
+
+        mainFrame.remove(contentSentEmailsView);
+        showCountView();
+    }
 
     private void setRegisterButton(){
         String username = usernameTextField1.getText();
@@ -995,9 +1112,47 @@ public class TCPGUIClient {
             JOptionPane.showMessageDialog(initialView, response, "Get content of retrieved emails",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(searchEmailSubjectView);
-            showSearchEmailSubjectView();
+            showGetContentRetreivedView();
 
             idTextField.setText("");
+
+            System.out.println(response);
+
+        }
+
+    }
+
+
+    private void getContentSentEmail(){
+
+        String Id = id2TextField.getText();
+
+        JsonObject payload = new JsonObject();
+        payload.addProperty("Id", Id);
+
+        // Create the overall request object
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.GET_CONTENT_SENT_EMAIL);
+        requestJson.add("payload", payload);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        if (response.equalsIgnoreCase(AuthUtils.NON_NUMERIC_ID) || response.equalsIgnoreCase(AuthUtils.EMAIL_ID_DOESNT_EXIST)) {
+
+            JOptionPane.showMessageDialog(initialView, response, "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }else {
+            JOptionPane.showMessageDialog(initialView, response, "Get content of retrieved emails",
+                    JOptionPane.INFORMATION_MESSAGE);
+            mainFrame.remove(contentSentEmailsView);
+            showGetContentSentView();
+
+            id2TextField.setText("");
 
             System.out.println(response);
 

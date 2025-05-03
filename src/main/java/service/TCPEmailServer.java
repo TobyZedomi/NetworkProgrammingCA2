@@ -78,6 +78,9 @@ public class TCPEmailServer implements Runnable {
                         case UserUtilities.GET_CONTENT_RETRIEVED_EMAILS:
                             jsonResponse = getContentOfRetreivedEmail(loginStatus, jsonRequest, emailManager);
                             break;
+                        case UserUtilities.GET_CONTENT_SENT_EMAIL:
+                            jsonResponse = getContentOfParticularSentEmail(loginStatus, jsonRequest);
+                            break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.ACK);
                             validClientSession = false;
@@ -104,6 +107,43 @@ public class TCPEmailServer implements Runnable {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private JsonObject getContentOfParticularSentEmail(boolean loginStatus, JsonObject jsonRequest) {
+        JsonObject jsonResponse;
+        if (!loginStatus){
+
+            JsonObject payload = (JsonObject) jsonRequest.get("payload");
+
+            if (payload.size() == 1) {
+
+                try {
+                    int Id = Integer.parseInt(payload.get("Id").getAsString());
+
+                    boolean checkIfEmailIdExist = emailManager.checkIfSendEmailIdExist(username, Id);
+
+                    Email email =  emailManager.getContentOfParticularSentEmail(username, Id);
+
+                    if (checkIfEmailIdExist){
+
+                        jsonResponse = createStatusResponseForContent(serializeEmailContentOnly(email));
+
+                    }else{
+                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST);
+                    }
+                }catch (NumberFormatException ex){
+                    jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID);
+                }
+
+            }else{
+                jsonResponse = createStatusResponse(UserUtilities.INVALID);
+            }
+
+        }else{
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+
+        }
+        return jsonResponse;
     }
 
     private JsonObject getContentOfRetreivedEmail(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
