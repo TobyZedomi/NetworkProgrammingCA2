@@ -67,19 +67,21 @@ public class TCPEmailServer implements Runnable {
                             }
                             break;
                         case UserUtilities.SEND_EMAIL:
-                            jsonResponse = sendEmail(loginStatus, action, jsonRequest, emailManager);
+                            jsonResponse = sendEmail(loginStatus, jsonRequest, emailManager);
                             break;
                         case UserUtilities.RETRIEVE_EMAILS:
                             jsonResponse = retreiveEmails(loginStatus, emailManager);
                             break;
                         case UserUtilities.SEARCH_RETRIEVED_EMAILS:
-                            jsonResponse = searchForretrivedEmailsBasedOnUsernameAndSubject(loginStatus, jsonRequest);
+                            jsonResponse = searchForretrivedEmailsBasedOnUsernameAndSubject(loginStatus, jsonRequest, emailManager);
+                            break;
+                        case UserUtilities.GET_CONTENT_RETRIEVED_EMAILS:
+                            jsonResponse = getContentOfRetreivedEmail(loginStatus, jsonRequest, emailManager);
                             break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.ACK);
                             validClientSession = false;
                             break;
-
                     }
 
                 }
@@ -104,7 +106,43 @@ public class TCPEmailServer implements Runnable {
         }
     }
 
-    private JsonObject searchForretrivedEmailsBasedOnUsernameAndSubject(boolean loginStatus, JsonObject jsonRequest) {
+    private JsonObject getContentOfRetreivedEmail(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
+        JsonObject jsonResponse;
+        if (!loginStatus) {
+
+            JsonObject payload = (JsonObject) jsonRequest.get("payload");
+
+            if (payload.size() == 1) {
+
+                try {
+                    int Id = Integer.parseInt(payload.get("Id").getAsString());
+
+                    boolean checkIfEmailIdExist = emailManager.checkIfReceivedEmailIdExist(username, Id);
+
+                  Email email =  emailManager.getContentOfParticularReceivedEmail(username, Id);
+
+                    if (checkIfEmailIdExist){
+
+                        jsonResponse = createStatusResponseForContent(serializeEmailContentOnly(email));
+
+                    }else{
+                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST);
+                    }
+                }catch (NumberFormatException ex){
+                    jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID);
+                }
+
+            }else{
+                jsonResponse = createStatusResponse(UserUtilities.INVALID);
+            }
+
+        }else {
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+        }
+        return jsonResponse;
+    }
+
+    private JsonObject searchForretrivedEmailsBasedOnUsernameAndSubject(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
         JsonObject jsonResponse;
         if (!loginStatus) {
 
@@ -154,7 +192,7 @@ public class TCPEmailServer implements Runnable {
         return jsonResponse;
     }
 
-    private JsonObject sendEmail(boolean loginStatus, String action, JsonObject jsonRequest, IEmailManager emailManager) {
+    private JsonObject sendEmail(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
 
         JsonObject jsonResponse = null;
 
@@ -292,6 +330,11 @@ public class TCPEmailServer implements Runnable {
         return "ID: " + m.getID() + UserUtilities.EMAIL_DELIMITER + "Sender: " + m.getSender() + UserUtilities.EMAIL_DELIMITER + "Subject: " + m.getSubject() + UserUtilities.EMAIL_DELIMITER + "Date: " + m.getTimeStamp().toLocalDate();
     }
 
+    public String serializeEmailContentOnly(Email email) {
+
+        return email.getContent();
+    }
+
 
     private static JsonObject createStatusResponse(String status) {
         JsonObject invalidResponse = new JsonObject();
@@ -305,4 +348,9 @@ public class TCPEmailServer implements Runnable {
         return invalidResponse;
     }
 
+    private JsonObject createStatusResponseForContent(String content) {
+        JsonObject invalidResponse = new JsonObject();
+        invalidResponse.addProperty("content", content);
+        return invalidResponse;
+    }
 }
