@@ -43,10 +43,10 @@ public class EmailManager implements IEmailManager {
 
 
     /// senderEmail an email
-    public boolean sendAnEmailToUser(String sender, String receiver, String subject, String message, LocalDateTime dateTime) {
+    public boolean sendAnEmailToUser(String sender, String receiver, String subject, String content, LocalDateTime dateTime) {
         Email emailToBeSent;
         synchronized (emailCountLock) {
-            emailToBeSent =  new Email(emailIdCount, sender, receiver, subject, message, dateTime);
+            emailToBeSent =  new Email(emailIdCount, sender, receiver, subject, content, dateTime);
             emailIdCount++;
         }
         return sendEmail(sender, receiver, emailToBeSent);
@@ -131,6 +131,83 @@ public class EmailManager implements IEmailManager {
     }
 
 
+    // get the content of a particular email
+
+    public Email getContentOfParticularReceivedEmail(String username, int emailId){
+
+        ArrayList<Email> emails = receiverEmails.get(username);
+
+        Email email = null;
+
+        for (int i = 0; i < emails.size();i++){
+
+            if (emails.get(i).getID() == emailId){
+
+               email = (emails.get(i));
+
+            }
+        }
+
+        return email;
+    }
+
+
+    // check if email id exist
+
+    public boolean checkIfReceivedEmailIdExist(String username, int id){
+
+        ArrayList<Email> emails = receiverEmails.get(username);
+
+        for (int i = 0; i < emails.size();i++){
+
+            if (emails.get(i).getID() == id){
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /// get content of sentEmails
+
+
+    public Email getContentOfParticularSentEmail(String username, int emailId){
+
+        ArrayList<Email> emails = senderEmails.get(username);
+
+        Email email = null;
+
+        for (int i = 0; i < emails.size();i++){
+
+            if (emails.get(i).getID() == emailId){
+
+                email = (emails.get(i));
+
+            }
+        }
+
+        return email;
+    }
+
+
+    // check if sender email id exist
+
+    public boolean checkIfSendEmailIdExist(String username, int id){
+
+        ArrayList<Email> emails = senderEmails.get(username);
+
+        for (int i = 0; i < emails.size();i++){
+
+            if (emails.get(i).getID() == id){
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     private void bootstrapEmailList() {
         ArrayList<Email> email = new ArrayList();
 
@@ -148,9 +225,6 @@ public class EmailManager implements IEmailManager {
         senderEmails.put("user@gmail.com", email);
         senderEmails.put("user1@gmail.com", email2);
         senderEmails.put("user2@gmail.com", email3);
-
-
-
     }
 
     private void bootstrapReceiverEmailList(){

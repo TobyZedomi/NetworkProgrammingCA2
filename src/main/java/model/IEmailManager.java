@@ -7,7 +7,7 @@ public interface IEmailManager {
 
      boolean addEmail(String email);
 
-     boolean sendAnEmailToUser(String sender, String receiver, String subject, String message, LocalDateTime dateTime);
+     boolean sendAnEmailToUser(String sender, String receiver, String subject, String content, LocalDateTime dateTime);
 
      boolean checkIfReceiverExist(String receiver);
 
@@ -16,5 +16,10 @@ public interface IEmailManager {
      ArrayList<Email> searchForRetrievedEmails(String username);
 
      ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject);
+     Email getContentOfParticularReceivedEmail(String username, int emailId);
+     boolean checkIfReceivedEmailIdExist(String username, int id);
+
+      Email getContentOfParticularSentEmail(String username, int emailId);
+      boolean checkIfSendEmailIdExist(String username, int id);
 
 }
