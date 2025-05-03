@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TCPGUIClient {
 
     // Provide networking functionality
@@ -806,6 +808,8 @@ public class TCPGUIClient {
             mainFrame.remove(initialView);
             showCountView();
 
+            log.info("User {} logged in", username);
+
             usernameField.setText("");
             passwordField.setText("");
 
@@ -828,6 +832,9 @@ public class TCPGUIClient {
 
         JOptionPane.showMessageDialog(initialView, response, "Login Failed",
                 JOptionPane.ERROR_MESSAGE);
+
+        log.info("User {} failed logged in", username);
+
 
 
     }
@@ -963,6 +970,8 @@ public class TCPGUIClient {
             mainFrame.remove(registerView);
             showCountView();
 
+            log.info("User {} registered successful", username);
+
             usernameTextField1.setText("");
             passwordTextField1.setText("");
             confirmPasswordTextField1.setText("");
@@ -973,6 +982,8 @@ public class TCPGUIClient {
         }
         JOptionPane.showMessageDialog(initialView, response, "Register Failed",
                 JOptionPane.ERROR_MESSAGE);
+        log.info("User {} failed registration", username);
+
     }
 
 
@@ -1009,6 +1020,9 @@ public class TCPGUIClient {
             mainFrame.remove(sendEmailView);
             showSendEmailView();
 
+            log.info("Email was sent to user {}", receiverEmail);
+
+
             receiverEmailTextField.setText("");
             subjectTextField.setText("");
             contentTextField.setText("");
@@ -1019,6 +1033,7 @@ public class TCPGUIClient {
         }
         JOptionPane.showMessageDialog(initialView, response, "Sent email failed",
                 JOptionPane.ERROR_MESSAGE);
+        log.info("Email was not sent to user {}", receiverEmail);
 
     }
 
@@ -1065,13 +1080,17 @@ public class TCPGUIClient {
 
         if (response.equalsIgnoreCase(AuthUtils.NO_EMAILS_WITH_THIS_SUBJECT)) {
 
-            JOptionPane.showMessageDialog(initialView, response, "No Emails with thi subject",
+            JOptionPane.showMessageDialog(initialView, response, "No Emails with this subject",
                     JOptionPane.ERROR_MESSAGE);
+
+            log.info("No emails with subject {}", subject);
         }else {
             JOptionPane.showMessageDialog(initialView, response, "Search retrieved emails based on subject",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(searchEmailSubjectView);
             showSearchEmailSubjectView();
+
+            log.info("Emails wth subject {}", subject);
 
             subjectSearchTextField.setText("");
 
