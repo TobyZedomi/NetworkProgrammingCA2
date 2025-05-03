@@ -79,7 +79,7 @@ public class TCPEmailServer implements Runnable {
                             jsonResponse = getContentOfRetreivedEmail(loginStatus, jsonRequest, emailManager);
                             break;
                         case UserUtilities.GET_CONTENT_SENT_EMAIL:
-                            jsonResponse = getContentOfParticularSentEmail(loginStatus, jsonRequest);
+                            jsonResponse = getContentOfParticularSentEmail(loginStatus, jsonRequest, emailManager);
                             break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.ACK);
@@ -109,7 +109,7 @@ public class TCPEmailServer implements Runnable {
         }
     }
 
-    private JsonObject getContentOfParticularSentEmail(boolean loginStatus, JsonObject jsonRequest) {
+    private JsonObject getContentOfParticularSentEmail(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
         JsonObject jsonResponse;
         if (!loginStatus){
 
