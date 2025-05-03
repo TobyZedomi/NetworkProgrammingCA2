@@ -15,4 +15,6 @@ public interface IEmailManager {
 
      ArrayList<Email> searchForRetrievedEmails(String username);
 
+     ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject);
+
 }

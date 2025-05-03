@@ -55,6 +55,8 @@ public class TCPGUIClient {
 
     private JButton retrieveEmails;
 
+    private JButton searchEmailsBasedOnSubject;
+
 
     private JPanel registerView;
     private JButton registerViewButton;
@@ -100,6 +102,16 @@ public class TCPGUIClient {
     private JTextField messageTextField;
 
 
+    // search for emails based on subject
+
+    private JPanel searchEmailSubjectView;
+
+    private JButton searchEmailButton;
+
+    private JLabel subjectSearchLabel;
+
+    private JTextField subjectSearchTextField;
+
 
 
 
@@ -122,6 +134,10 @@ public class TCPGUIClient {
 
         // send an email Panel
         configureSendEmailPanel();
+
+        // search for email based on subject panel
+
+        configureSearchForSubjectPanel();
 
     }
 
@@ -265,6 +281,17 @@ public class TCPGUIClient {
         });
 
 
+        // search emails
+
+        searchEmailsBasedOnSubject = new JButton("Search Retrieve Emails Based OnSubject");
+        // Specify what the button should DO when clicked:
+        searchEmailsBasedOnSubject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goToSearchEmailsPage();
+            }
+        });
+
 
         // logout
 
@@ -283,7 +310,9 @@ public class TCPGUIClient {
 
         countCharView.add(retrieveEmails, getGridBagConstraints(0, 3, 2));
 
-        countCharView.add(logOut, getGridBagConstraints(0, 4, 2));
+        countCharView.add(searchEmailsBasedOnSubject, getGridBagConstraints(0, 4, 2));
+
+        countCharView.add(logOut, getGridBagConstraints(0, 5, 2));
     }
 
     private void showInitialView(){
@@ -385,8 +414,6 @@ public class TCPGUIClient {
     /// send an email Panel
 
 
-    // register View
-
     private void configureSendEmailPanel(){
         // Create and configure the config panel
         // This will provide a view to take in the user credentials
@@ -467,6 +494,78 @@ public class TCPGUIClient {
         mainFrame.add(sendEmailView);
         mainFrame.setVisible(true);
     }
+
+
+    // search for email based on subject
+
+
+    private void configureSearchForSubjectPanel(){
+        // Create and configure the config panel
+        // This will provide a view to take in the user credentials
+        // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
+        searchEmailSubjectView = new JPanel(new GridBagLayout());
+        // Register this panel as a container in the system
+        guiContainers.put("searchEmailSubjectView", searchEmailSubjectView);
+
+
+        subjectSearchLabel = new JLabel("Subject: ");
+        subjectSearchTextField = new JTextField(15);
+
+
+        // Create a button to log in user
+        searchEmailButton = new JButton("Search Email");
+        // Specify what the button should DO when clicked:
+        searchEmailButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchForEmailBasedOnSubject();
+            }
+        });
+
+
+        goBackToHomePage = new JButton("Go Back To Home Page");
+        // Specify what the button should DO when clicked:
+        goBackToHomePage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goBackToHomePageSendEmail2();
+            }
+        });
+
+
+        logOut = new JButton("LogOut");
+        // Specify what the button should DO when clicked:
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logOutSearchEmail();
+            }
+        });
+
+
+
+        searchEmailSubjectView.add(subjectSearchLabel, getGridBagConstraints(0, 1, 1));
+        searchEmailSubjectView.add(subjectSearchTextField, getGridBagConstraints(1, 1, 1));
+
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        searchEmailSubjectView.add(searchEmailButton, getGridBagConstraints(0, 2, 2));
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        searchEmailSubjectView.add(goBackToHomePage, getGridBagConstraints(0, 3, 2));
+        searchEmailSubjectView.add(logOut, getGridBagConstraints(0, 4, 2));
+    }
+
+
+    private void showSearchEmailSubjectView(){
+
+        // Add config panel to the main window and make it visible
+        // mainFrame.remove(0);
+
+        mainFrame.add(searchEmailSubjectView);
+        mainFrame.setVisible(true);
+    }
+
 
 
 
@@ -552,6 +651,12 @@ public class TCPGUIClient {
         showSendEmailView();
     }
 
+    private void goToSearchEmailsPage(){
+
+        mainFrame.remove(countCharView);
+        showSearchEmailSubjectView();
+    }
+
     private void goBackToLogin(){
 
         mainFrame.remove(registerView);
@@ -567,12 +672,25 @@ public class TCPGUIClient {
     }
 
 
+    private void logOutSearchEmail(){
+
+        mainFrame.remove(searchEmailSubjectView);
+        showInitialView();
+    }
+
+
     private void goBackToHomePageSendEmail(){
 
         mainFrame.remove(sendEmailView);
         showCountView();
     }
 
+
+    private void goBackToHomePageSendEmail2(){
+
+        mainFrame.remove(searchEmailSubjectView);
+        showCountView();
+    }
 
 
 
@@ -684,6 +802,46 @@ public class TCPGUIClient {
 
         JOptionPane.showMessageDialog(initialView, response, "Retrieve Emails",
                 JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    // search for email based on subject
+
+
+    private void searchForEmailBasedOnSubject(){
+
+        String subject = subjectSearchTextField.getText();
+
+        JsonObject payload = new JsonObject();
+        payload.addProperty("subject", subject);
+
+        // Create the overall request object
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.SEARCH_RETRIEVED_EMAILS);
+        requestJson.add("payload", payload);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        if (response.equalsIgnoreCase(AuthUtils.NO_EMAILS_WITH_THIS_SUBJECT)) {
+
+            JOptionPane.showMessageDialog(initialView, response, "No Emails with thi subject",
+                    JOptionPane.ERROR_MESSAGE);
+        }else {
+            JOptionPane.showMessageDialog(initialView, response, "Search retrieved emails based on subject",
+                    JOptionPane.INFORMATION_MESSAGE);
+            mainFrame.remove(searchEmailSubjectView);
+            showSearchEmailSubjectView();
+
+            subjectSearchTextField.setText("");
+
+            System.out.println(response);
+
+        }
 
     }
 

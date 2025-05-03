@@ -109,6 +109,28 @@ public class EmailManager implements IEmailManager {
     }
 
 
+
+    // search for email based on subject
+
+
+    public ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject){
+
+        ArrayList<Email> retrievedEmails = new ArrayList<>();
+
+        ArrayList<Email> email = receiverEmails.get(username);
+
+        for (int i = 0; i < email.size(); i++) {
+
+            if (email.get(i).getSubject().equalsIgnoreCase(subject)) {
+
+                retrievedEmails.add(email.get(i));
+
+            }
+        }
+        return retrievedEmails;
+    }
+
+
     private void bootstrapEmailList() {
         ArrayList<Email> email = new ArrayList();
 
