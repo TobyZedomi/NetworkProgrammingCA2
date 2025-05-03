@@ -11,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.StringJoiner;
 
 public class TCPEmailServer implements Runnable {
@@ -71,33 +70,7 @@ public class TCPEmailServer implements Runnable {
                             jsonResponse = sendEmail(loginStatus, action, jsonRequest, emailManager);
                             break;
                         case UserUtilities.RETRIEVE_EMAILS:
-
-                            if (!loginStatus) {
-
-                                ArrayList<Email> emailsForUser = emailManager.searchForRetrievedEmails(username);
-
-                                System.out.println(emailsForUser);
-
-                                if (!emailsForUser.isEmpty()) {
-                                    if (emailsForUser != null) {
-
-                                        jsonResponse = serializeEmails(emailsForUser);
-                                        System.out.println("im here");
-
-                                    } else {
-                                        jsonResponse = createStatusResponse(UserUtilities.INVALID);
-                                    }
-
-                                } else {
-                                    jsonResponse = createStatusResponse(UserUtilities.YOU_HAVE_NO_EMAILS);
-                                }
-
-
-                            } else {
-
-                                jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
-                            }
-
+                            jsonResponse = retreiveEmails(loginStatus, emailManager);
                             break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.ACK);
@@ -126,6 +99,26 @@ public class TCPEmailServer implements Runnable {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private JsonObject retreiveEmails(boolean loginStatus, IEmailManager emailManager) {
+        JsonObject jsonResponse;
+        if (!loginStatus) {
+            ArrayList<Email> emailsForUser = emailManager.searchForRetrievedEmails(username);
+
+            if (!emailsForUser.isEmpty()) {
+                if (emailsForUser != null) {
+                    jsonResponse = serializeEmails(emailsForUser);
+                } else {
+                    jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                }
+            } else {
+                jsonResponse = createStatusResponse(UserUtilities.YOU_HAVE_NO_EMAILS);
+            }
+        } else {
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+        }
+        return jsonResponse;
     }
 
     private JsonObject sendEmail(boolean loginStatus, String action, JsonObject jsonRequest, IEmailManager emailManager) {
