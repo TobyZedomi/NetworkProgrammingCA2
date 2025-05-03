@@ -1,5 +1,8 @@
 package model;
 
+import com.google.gson.JsonObject;
+import service.UserUtilities;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -89,6 +92,23 @@ public class EmailManager implements IEmailManager {
         return match;
     }
 
+
+    // retrieve emails for the logged in user
+
+    public ArrayList<Email> searchForRetrievedEmails(String username){
+
+        ArrayList<Email> retrievedEmails = new ArrayList<>();
+
+        ArrayList<Email> email = receiverEmails.get(username);
+
+                for (int i = 0; i < email.size(); i++) {
+
+                    retrievedEmails.add(email.get(i));
+                }
+        return retrievedEmails;
+    }
+
+
     private void bootstrapEmailList() {
         ArrayList<Email> email = new ArrayList();
 
@@ -114,17 +134,16 @@ public class EmailManager implements IEmailManager {
     private void bootstrapReceiverEmailList(){
 
         ArrayList<Email> email = new ArrayList();
-
         email.add(new Email(1, "user1@gmail.com", "user@gmail.com", "Rock", "I Love Rock", LocalDateTime.of(2025, 02, 9, 5, 34)));
 
         ArrayList<Email> email2 = new ArrayList();
-
         email2.add(new Email(1, "user2@gmail.com", "user1@gmail.com", "Pop", "I Love Pop", LocalDateTime.of(2025, 02, 9, 5, 34)));
+        email2.add(new Email(2, "user@gmail.com", "user1@gmail.com", "Rock", "I Love Rock", LocalDateTime.of(2025, 9, 20, 5, 34)));
+        email2.add(new Email(3, "user@gmail.com", "user1@gmail.com", "Hip Hop", "I Love Hip Hop", LocalDateTime.of(2025, 12, 19, 5, 34)));
 
 
         ArrayList<Email> email3 = new ArrayList();
-
-        email3.add(new Email(1, "user2@gmail.com", "user1@gmail.com", "Pop", "I Love Pop", LocalDateTime.of(2025, 02, 9, 5, 34)));
+        email3.add(new Email(1, "user2@gmail.com", "user2@gmail.com", "Pop", "I Love Pop", LocalDateTime.of(2025, 02, 9, 5, 34)));
 
         receiverEmails.put("user@gmail.com", email);
         receiverEmails.put("user1@gmail.com", email2);
