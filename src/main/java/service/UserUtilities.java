@@ -14,6 +14,8 @@ public class UserUtilities {
 
     public static final String SEND_EMAIL = "SEND_EMAIL";
 
+    public static final String RETRIEVE_EMAILS = "RETRIEVE_EMAILS";
+
 
 
     // Responses
@@ -42,6 +44,11 @@ public class UserUtilities {
 
     public static final String NOT_LOGGED_IN = "NOT_LOGGED_IN";
 
+    public static final String YOU_HAVE_NO_EMAILS = "YOU_HAVE_NO_EMAILS";
+
+    public static final String EMAIL_RETREIEVED_SUCCESSFULLY = "EMAIL_RETREIEVED_SUCCESSFULLY";
+
+
 
 
     public static final String ACK = "GOODBYE";
@@ -49,7 +56,9 @@ public class UserUtilities {
 
     // DELIMITERS
     public static final String DELIMITER = "%%";
-    public static final String EMAIL_DELIMITER = "##";
+    public static final String EMAIL_DELIMITER = ", ";
+
+    public static final String EMAIL_DELIMITER2 = "## ";
 
 
 
