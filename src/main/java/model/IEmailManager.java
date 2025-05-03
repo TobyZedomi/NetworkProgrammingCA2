@@ -16,5 +16,7 @@ public interface IEmailManager {
      ArrayList<Email> searchForRetrievedEmails(String username);
 
      ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject);
+     Email getContentOfParticularReceivedEmail(String username, int emailId);
+     boolean checkIfReceivedEmailIdExist(String username, int id);
 
 }

@@ -133,6 +133,41 @@ public class EmailManager implements IEmailManager {
 
     // get the content of a particular email
 
+    public Email getContentOfParticularReceivedEmail(String username, int emailId){
+
+        ArrayList<Email> emails = receiverEmails.get(username);
+
+        Email email = null;
+
+        for (int i = 0; i < emails.size();i++){
+
+            if (emails.get(i).getID() == emailId){
+
+               email = (emails.get(i));
+
+            }
+        }
+
+        return email;
+    }
+
+
+    // check if email id exist
+
+    public boolean checkIfReceivedEmailIdExist(String username, int id){
+
+        ArrayList<Email> emails = receiverEmails.get(username);
+
+        for (int i = 0; i < emails.size();i++){
+
+            if (emails.get(i).getID() == id){
+
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 
@@ -153,9 +188,6 @@ public class EmailManager implements IEmailManager {
         senderEmails.put("user@gmail.com", email);
         senderEmails.put("user1@gmail.com", email2);
         senderEmails.put("user2@gmail.com", email3);
-
-
-
     }
 
     private void bootstrapReceiverEmailList(){
