@@ -166,7 +166,7 @@ public class TCPEmailServer implements Runnable {
                     String sender = username;
                     String receiver = payload.get("receiver").getAsString();
                     String subject = payload.get("subject").getAsString();
-                    String message = payload.get("message").getAsString();
+                    String content = payload.get("content").getAsString();
                     LocalDateTime date = LocalDateTime.now();
 
 
@@ -179,7 +179,7 @@ public class TCPEmailServer implements Runnable {
                         if (checkEmailIsValidFormat == true) {
 
                             if (checkIfReceiverExist == true) {
-                                emailManager.sendAnEmailToUser(sender, receiver, subject, message, date);
+                                emailManager.sendAnEmailToUser(sender, receiver, subject, content, date);
 
                                 jsonResponse = createStatusResponse(UserUtilities.EMAIL_SUCCESSFULLY_SENT);
                             } else {

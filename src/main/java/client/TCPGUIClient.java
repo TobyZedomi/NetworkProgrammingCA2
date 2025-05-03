@@ -96,10 +96,10 @@ public class TCPGUIClient {
     private JTextField subjectTextField;
 
 
-    private JLabel messageLabel;
+    private JLabel contentLabel;
 
 
-    private JTextField messageTextField;
+    private JTextField contentTextField;
 
 
     // search for emails based on subject
@@ -431,8 +431,8 @@ public class TCPGUIClient {
         subjectTextField = new JTextField(15);
 
 
-        messageLabel = new JLabel("Message: ");
-        messageTextField = new JTextField(15);
+        contentLabel = new JLabel("Content: ");
+        contentTextField = new JTextField(15);
 
 
 
@@ -473,8 +473,8 @@ public class TCPGUIClient {
         sendEmailView.add(subjectLabel, getGridBagConstraints(0, 1, 1));
         sendEmailView.add(subjectTextField, getGridBagConstraints(1, 1, 1));
 
-        sendEmailView.add(messageLabel, getGridBagConstraints(0, 2, 1));
-        sendEmailView.add(messageTextField, getGridBagConstraints(1, 2, 1));
+        sendEmailView.add(contentLabel, getGridBagConstraints(0, 2, 1));
+        sendEmailView.add(contentTextField, getGridBagConstraints(1, 2, 1));
 
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
@@ -746,13 +746,13 @@ public class TCPGUIClient {
 
         String receiverEmail = receiverEmailTextField.getText();
         String subject = subjectTextField.getText();
-        String message = messageTextField.getText();
+        String content = contentTextField.getText();
 
 
         JsonObject payload = new JsonObject();
         payload.addProperty("receiver", receiverEmail);
         payload.addProperty("subject", subject);
-        payload.addProperty("message", message);
+        payload.addProperty("content", content);
 
         // Create the overall request object
         JsonObject requestJson = new JsonObject();
@@ -775,7 +775,7 @@ public class TCPGUIClient {
 
             receiverEmailTextField.setText("");
             subjectTextField.setText("");
-            messageTextField.setText("");
+            contentTextField.setText("");
 
             System.out.println(response);
             return;

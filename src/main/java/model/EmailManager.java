@@ -43,10 +43,10 @@ public class EmailManager implements IEmailManager {
 
 
     /// senderEmail an email
-    public boolean sendAnEmailToUser(String sender, String receiver, String subject, String message, LocalDateTime dateTime) {
+    public boolean sendAnEmailToUser(String sender, String receiver, String subject, String content, LocalDateTime dateTime) {
         Email emailToBeSent;
         synchronized (emailCountLock) {
-            emailToBeSent =  new Email(emailIdCount, sender, receiver, subject, message, dateTime);
+            emailToBeSent =  new Email(emailIdCount, sender, receiver, subject, content, dateTime);
             emailIdCount++;
         }
         return sendEmail(sender, receiver, emailToBeSent);
@@ -129,6 +129,11 @@ public class EmailManager implements IEmailManager {
         }
         return retrievedEmails;
     }
+
+
+    // get the content of a particular email
+
+
 
 
     private void bootstrapEmailList() {

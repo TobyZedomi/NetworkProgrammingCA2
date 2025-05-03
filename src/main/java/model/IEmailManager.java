@@ -7,7 +7,7 @@ public interface IEmailManager {
 
      boolean addEmail(String email);
 
-     boolean sendAnEmailToUser(String sender, String receiver, String subject, String message, LocalDateTime dateTime);
+     boolean sendAnEmailToUser(String sender, String receiver, String subject, String content, LocalDateTime dateTime);
 
      boolean checkIfReceiverExist(String receiver);
 

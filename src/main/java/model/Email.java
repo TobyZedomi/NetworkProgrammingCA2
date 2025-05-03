@@ -15,7 +15,7 @@ public class Email {
     private String sender;
     private String receiver;
     private String subject;
-    private String message;
+    private String content;
     private LocalDateTime timeStamp;
 
 
