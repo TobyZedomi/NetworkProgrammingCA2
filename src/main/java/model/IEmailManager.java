@@ -1,15 +1,18 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public interface IEmailManager {
 
-    public boolean addEmail(String email);
+     boolean addEmail(String email);
 
-    public boolean sendAnEmailToUser(String sender, String receiver, String subject, String message, LocalDateTime dateTime);
+     boolean sendAnEmailToUser(String sender, String receiver, String subject, String message, LocalDateTime dateTime);
 
-    public boolean checkIfReceiverExist(String receiver);
+     boolean checkIfReceiverExist(String receiver);
 
-    public boolean checkIfEmailMatchRegex(String email);
+     boolean checkIfEmailMatchRegex(String email);
+
+     ArrayList<Email> searchForRetrievedEmails(String username);
 
 }
