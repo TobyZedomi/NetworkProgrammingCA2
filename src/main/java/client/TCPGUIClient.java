@@ -53,6 +53,9 @@ public class TCPGUIClient {
     private JButton sendEmail;
 
 
+    private JButton retrieveEmails;
+
+
     private JPanel registerView;
     private JButton registerViewButton;
 
@@ -250,6 +253,17 @@ public class TCPGUIClient {
             }
         });
 
+        // send email
+
+        retrieveEmails = new JButton("Retrieve Emails");
+        // Specify what the button should DO when clicked:
+        retrieveEmails.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                retrieveEmailsForUser();
+            }
+        });
+
 
 
         // logout
@@ -267,7 +281,9 @@ public class TCPGUIClient {
         // Add button on third row (y = 2) spanning two columns (width = 2)
         countCharView.add(sendEmail, getGridBagConstraints(0, 2, 2));
 
-        countCharView.add(logOut, getGridBagConstraints(0, 3, 2));
+        countCharView.add(retrieveEmails, getGridBagConstraints(0, 3, 2));
+
+        countCharView.add(logOut, getGridBagConstraints(0, 4, 2));
     }
 
     private void showInitialView(){
@@ -649,6 +665,25 @@ public class TCPGUIClient {
         }
         JOptionPane.showMessageDialog(initialView, response, "Register Failed",
                 JOptionPane.ERROR_MESSAGE);
+
+    }
+
+
+    private void retrieveEmailsForUser(){
+
+        // Create the overall request object
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.RETRIEVE_EMAILS);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        JOptionPane.showMessageDialog(initialView, response, "Retrieve Emails",
+                JOptionPane.INFORMATION_MESSAGE);
 
     }
 
