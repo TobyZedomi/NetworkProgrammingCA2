@@ -19,4 +19,7 @@ public interface IEmailManager {
      Email getContentOfParticularReceivedEmail(String username, int emailId);
      boolean checkIfReceivedEmailIdExist(String username, int id);
 
+      Email getContentOfParticularSentEmail(String username, int emailId);
+      boolean checkIfSendEmailIdExist(String username, int id);
+
 }

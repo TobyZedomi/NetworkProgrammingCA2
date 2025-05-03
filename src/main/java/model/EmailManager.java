@@ -169,6 +169,43 @@ public class EmailManager implements IEmailManager {
     }
 
 
+    /// get content of sentEmails
+
+
+    public Email getContentOfParticularSentEmail(String username, int emailId){
+
+        ArrayList<Email> emails = senderEmails.get(username);
+
+        Email email = null;
+
+        for (int i = 0; i < emails.size();i++){
+
+            if (emails.get(i).getID() == emailId){
+
+                email = (emails.get(i));
+
+            }
+        }
+
+        return email;
+    }
+
+
+    // check if sender email id exist
+
+    public boolean checkIfSendEmailIdExist(String username, int id){
+
+        ArrayList<Email> emails = senderEmails.get(username);
+
+        for (int i = 0; i < emails.size();i++){
+
+            if (emails.get(i).getID() == id){
+
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     private void bootstrapEmailList() {
