@@ -1004,7 +1004,7 @@ public class TCPGUIClient {
 
         if (response.equalsIgnoreCase(AuthUtils.EMAIL_SUCCESSFULLY_SENT)) {
 
-            JOptionPane.showMessageDialog(initialView, response, "Register Successful",
+            JOptionPane.showMessageDialog(initialView, response, "Sent email Successful",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(sendEmailView);
             showSendEmailView();
@@ -1017,7 +1017,7 @@ public class TCPGUIClient {
             return;
 
         }
-        JOptionPane.showMessageDialog(initialView, response, "Register Failed",
+        JOptionPane.showMessageDialog(initialView, response, "Sent email failed",
                 JOptionPane.ERROR_MESSAGE);
 
     }
