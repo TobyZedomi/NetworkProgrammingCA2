@@ -15,9 +15,13 @@ public class AuthUtils {
 
     public static final String RETRIEVE_EMAILS = "RETRIEVE_EMAILS";
 
+    public static final String SEARCH_RETRIEVED_EMAILS = "SEARCH_RETRIEVED_EMAILS";
+
     public static final String ACK = "GOODBYE";
 
     public static final String LOGIN_SUCCESSFUL = "{\"status\":\"LOGIN_SUCCESSFUL\"}";
+
+    public static final String NO_EMAILS_WITH_THIS_SUBJECT = "{\"status\":\"NO_EMAILS_WITH_THIS_SUBJECT\"}";
 
     public static final String REGISTER_SUCCESSFUL =   "{\"status\":\"REGISTER_SUCCESSFUL\"}";
     public static final String DELIMITER = "%%";

@@ -16,6 +16,8 @@ public class UserUtilities {
 
     public static final String RETRIEVE_EMAILS = "RETRIEVE_EMAILS";
 
+    public static final String SEARCH_RETRIEVED_EMAILS = "SEARCH_RETRIEVED_EMAILS";
+
 
 
     // Responses
@@ -48,7 +50,7 @@ public class UserUtilities {
 
     public static final String EMAIL_RETREIEVED_SUCCESSFULLY = "EMAIL_RETREIEVED_SUCCESSFULLY";
 
-
+    public static final String NO_EMAILS_WITH_THIS_SUBJECT = "NO_EMAILS_WITH_THIS_SUBJECT";
 
 
     public static final String ACK = "GOODBYE";
