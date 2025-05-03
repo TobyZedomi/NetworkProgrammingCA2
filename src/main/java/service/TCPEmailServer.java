@@ -1,10 +1,7 @@
 package service;
 
 import com.google.gson.JsonObject;
-import model.EmailManager;
-import model.IEmailManager;
-import model.IUserManager;
-import model.UserManager;
+import model.*;
 import network.TCPNetworkLayer;
 import com.google.gson.Gson;
 
@@ -13,6 +10,9 @@ import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 
 public class TCPEmailServer implements Runnable {
 
@@ -22,7 +22,7 @@ public class TCPEmailServer implements Runnable {
 
     private EmailManager emailManager;
 
-    private String username;
+    private static String username;
 
     private final Gson gson = new Gson();
 
@@ -69,6 +69,35 @@ public class TCPEmailServer implements Runnable {
                             break;
                         case UserUtilities.SEND_EMAIL:
                             jsonResponse = sendEmail(loginStatus, action, jsonRequest, emailManager);
+                            break;
+                        case UserUtilities.RETRIEVE_EMAILS:
+
+                            if (!loginStatus) {
+
+                                ArrayList<Email> emailsForUser = emailManager.searchForRetrievedEmails(username);
+
+                                System.out.println(emailsForUser);
+
+                                if (!emailsForUser.isEmpty()) {
+                                    if (emailsForUser != null) {
+
+                                        jsonResponse = serializeEmails(emailsForUser);
+                                        System.out.println("im here");
+
+                                    } else {
+                                        jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                                    }
+
+                                } else {
+                                    jsonResponse = createStatusResponse(UserUtilities.YOU_HAVE_NO_EMAILS);
+                                }
+
+
+                            } else {
+
+                                jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+                            }
+
                             break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.ACK);
@@ -135,12 +164,12 @@ public class TCPEmailServer implements Runnable {
                         } else {
                             jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT);
                         }
-                    }else{
+                    } else {
                         jsonResponse = createStatusResponse(UserUtilities.INVALID_DATE_TIME);
                     }
                 }
             }
-        }else{
+        } else {
 
             jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
         }
@@ -170,14 +199,14 @@ public class TCPEmailServer implements Runnable {
                 if (checkPasswordsMatch == true) {
 
                     if (checkPasswordFormat == true) {
-                            if (checkEmailFormat == true) {
+                        if (checkEmailFormat == true) {
 
-                                userManager.registerUser(username, password);
-                                emailManager.addEmail(username);
-                                jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL);
-                            } else {
-                                jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT);
-                            }
+                            userManager.registerUser(username, password);
+                            emailManager.addEmail(username);
+                            jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL);
+                        } else {
+                            jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT);
+                        }
                     } else {
                         jsonResponse = createStatusResponse(UserUtilities.INVALID_PASSWORD_FORMAT);
                     }
@@ -199,8 +228,9 @@ public class TCPEmailServer implements Runnable {
         JsonObject payload = (JsonObject) jsonRequest.get("payload");
         if (payload.size() == 2) {
 
-            String username = payload.get("username").getAsString();
-            email = username;
+            String usernameLoggedIn = payload.get("username").getAsString();
+            email = usernameLoggedIn;
+            username = usernameLoggedIn;
             String password = payload.get("password").getAsString();
 
             boolean loginUser = userManager.loginUser(email, password);
@@ -217,9 +247,36 @@ public class TCPEmailServer implements Runnable {
     }
 
 
-    private static JsonObject createStatusResponse(String status){
+    public JsonObject serializeEmails(ArrayList<Email> emails) {
+
+        JsonObject jsonResponse = null;
+
+        StringJoiner joiner = new StringJoiner(UserUtilities.EMAIL_DELIMITER2);
+
+        for (Email e : emails){
+            joiner.add(serializeEmail(e));
+            jsonResponse = createStatusResponse2( joiner.toString());
+        }
+        return jsonResponse;
+    }
+
+    public  String serializeEmail(Email m){
+        if(m == null){
+            throw new IllegalArgumentException("Cannot serialise null Movie");
+        }
+        return "ID: " + m.getID() + UserUtilities.EMAIL_DELIMITER + "Sender: " + m.getSender()  + UserUtilities.EMAIL_DELIMITER + "Subject: " + m.getSubject() + UserUtilities.EMAIL_DELIMITER  + "Date: " + m.getTimeStamp().toLocalDate();
+    }
+
+
+    private static JsonObject createStatusResponse(String status) {
         JsonObject invalidResponse = new JsonObject();
         invalidResponse.addProperty("status", status);
+        return invalidResponse;
+    }
+
+    private JsonObject createStatusResponse2( String emails) {
+        JsonObject invalidResponse = new JsonObject();
+        invalidResponse.addProperty("emails", emails);
         return invalidResponse;
     }
 
