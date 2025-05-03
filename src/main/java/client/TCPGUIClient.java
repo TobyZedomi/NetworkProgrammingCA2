@@ -538,7 +538,7 @@ public class TCPGUIClient {
         logOut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logOutSendEmail();
+                logOutSearchEmail();
             }
         });
 
@@ -668,6 +668,13 @@ public class TCPGUIClient {
     private void logOutSendEmail(){
 
         mainFrame.remove(sendEmailView);
+        showInitialView();
+    }
+
+
+    private void logOutSearchEmail(){
+
+        mainFrame.remove(searchEmailSubjectView);
         showInitialView();
     }
 

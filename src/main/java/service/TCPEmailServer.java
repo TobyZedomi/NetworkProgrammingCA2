@@ -73,33 +73,7 @@ public class TCPEmailServer implements Runnable {
                             jsonResponse = retreiveEmails(loginStatus, emailManager);
                             break;
                         case UserUtilities.SEARCH_RETRIEVED_EMAILS:
-
-                            if (!loginStatus) {
-
-                                JsonObject payload = (JsonObject) jsonRequest.get("payload");
-                                if (payload.size() == 1) {
-                                    String subject = payload.get("subject").getAsString();
-
-                                    ArrayList<Email> emailsForUserBasedOnSubject = emailManager.searchForRetrievedEmailsBasedOnSubject(username, subject);
-
-                                    if (!emailsForUserBasedOnSubject.isEmpty()) {
-                                        if (emailsForUserBasedOnSubject != null) {
-                                                jsonResponse = serializeEmails(emailsForUserBasedOnSubject);
-
-                                        } else {
-                                            jsonResponse = createStatusResponse(UserUtilities.INVALID);
-                                        }
-                                    } else {
-                                        jsonResponse = createStatusResponse(UserUtilities.NO_EMAILS_WITH_THIS_SUBJECT);
-                                    }
-
-                                } else {
-                                    jsonResponse = createStatusResponse(UserUtilities.INVALID);
-                                }
-                            } else {
-                                jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
-                            }
-
+                            jsonResponse = searchForretrivedEmailsBasedOnUsernameAndSubject(loginStatus, jsonRequest);
                             break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.ACK);
@@ -130,6 +104,36 @@ public class TCPEmailServer implements Runnable {
         }
     }
 
+    private JsonObject searchForretrivedEmailsBasedOnUsernameAndSubject(boolean loginStatus, JsonObject jsonRequest) {
+        JsonObject jsonResponse;
+        if (!loginStatus) {
+
+            JsonObject payload = (JsonObject) jsonRequest.get("payload");
+            if (payload.size() == 1) {
+                String subject = payload.get("subject").getAsString();
+
+                ArrayList<Email> emailsForUserBasedOnSubject = emailManager.searchForRetrievedEmailsBasedOnSubject(username, subject);
+
+                if (!emailsForUserBasedOnSubject.isEmpty()) {
+                    if (emailsForUserBasedOnSubject != null) {
+                            jsonResponse = serializeEmails(emailsForUserBasedOnSubject);
+
+                    } else {
+                        jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                    }
+                } else {
+                    jsonResponse = createStatusResponse(UserUtilities.NO_EMAILS_WITH_THIS_SUBJECT);
+                }
+
+            } else {
+                jsonResponse = createStatusResponse(UserUtilities.INVALID);
+            }
+        } else {
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+        }
+        return jsonResponse;
+    }
+
     private JsonObject retreiveEmails(boolean loginStatus, IEmailManager emailManager) {
         JsonObject jsonResponse;
         if (!loginStatus) {
@@ -155,8 +159,6 @@ public class TCPEmailServer implements Runnable {
         JsonObject jsonResponse = null;
 
         if (!loginStatus) {
-
-            if (action.equalsIgnoreCase(UserUtilities.SEND_EMAIL)) {
 
                 JsonObject payload = (JsonObject) jsonRequest.get("payload");
                 if (payload.size() == 3) {
@@ -192,7 +194,6 @@ public class TCPEmailServer implements Runnable {
                 } else {
                     jsonResponse = createStatusResponse(UserUtilities.INVALID);
                 }
-            }
         } else {
 
             jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
