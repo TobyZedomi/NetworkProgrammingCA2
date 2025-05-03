@@ -1,10 +1,11 @@
 package model;
 
-import java.sql.Connection;
+import org.junit.jupiter.api.Test;
+
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +15,7 @@ class EmailManagerTest {
      * Test to add a user to an email
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void addEmail() {
         System.out.println("Testing adding Email for User");
 
@@ -31,7 +32,7 @@ class EmailManagerTest {
      * Test to add User to an email but they already exist and has an email
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void addEmailButUserAlreadyExist() {
         System.out.println("Testing adding Email for User but they already exist and has an email");
 
@@ -47,7 +48,7 @@ class EmailManagerTest {
     /**
      * Send an email to a user in the system
      */
-    @org.junit.jupiter.api.Test
+    @Test
     void sendAnEmailToUser() {
 
         System.out.println("Send email to a user in the system");
@@ -68,7 +69,7 @@ class EmailManagerTest {
     /**
      * Send email to user but sender doesnt exist
      */
-    @org.junit.jupiter.api.Test
+    @Test
     void sendAnEmailToUserButSenderDoesntExist() {
 
         System.out.println("Send email to a user in the system but sender doesnt exist");
@@ -89,7 +90,7 @@ class EmailManagerTest {
     /**
      * Send email to user but sender is null
      */
-    @org.junit.jupiter.api.Test
+    @Test
     void sendAnEmailToUserButSenderIsNull() {
 
         System.out.println("Send email to a user in the system but sender is null");
@@ -111,7 +112,7 @@ class EmailManagerTest {
     /**
      * Send email to user but receiver doesnt exist and is null
      */
-    @org.junit.jupiter.api.Test
+    @Test
     void sendAnEmailToUserButReceiverDoesntExist() {
 
         System.out.println("Send email to a user in the system but receiver doesnt exist and is null");
@@ -134,7 +135,7 @@ class EmailManagerTest {
      * Test for when receiver exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfReceiverExist() {
 
         System.out.println("Test for when receiver exist");
@@ -152,7 +153,7 @@ class EmailManagerTest {
      * Test for when receiver doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfReceiverDoesntExist() {
 
         System.out.println("Test for when receiver doesnt exist");
@@ -170,7 +171,7 @@ class EmailManagerTest {
      * Test for when receiver is null
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfReceiverIsNull() {
 
         System.out.println("Test for when receiver is null");
@@ -190,7 +191,7 @@ class EmailManagerTest {
      * test for if email matches format
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfEmailMatchRegex() {
 
         System.out.println("Test for when email matches format");
@@ -208,7 +209,7 @@ class EmailManagerTest {
      * test for if email doesn't match format
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfEmailDoesntMatchRegex() {
 
         System.out.println("Test for when email doesnt match format");
@@ -226,7 +227,7 @@ class EmailManagerTest {
      * test for if email is null
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfEmailDoesntMatchRegexCauseItsNull() {
 
         System.out.println("Test for when email doesnt match format cause its null");
@@ -245,7 +246,7 @@ class EmailManagerTest {
      * Test to search for retrieved emails by username
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void searchForRetrievedEmails() {
 
         System.out.println("Test to search for retrieved emails by username");
@@ -267,7 +268,7 @@ class EmailManagerTest {
      * Test to search for retrieved emails but username doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void searchForRetrievedEmailsButUsernameDoesntExist() {
 
         System.out.println("Test to search for retrieved emails");
@@ -286,7 +287,7 @@ class EmailManagerTest {
      * Test to search for retrieved emails based on subject and username
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void searchForRetrievedEmailsBasedOnSubjectAndUsername() {
 
         System.out.println("Test to search for retrieved emails based on subject and username");
@@ -308,7 +309,7 @@ class EmailManagerTest {
      * Test to search for retrieved emails based on subject and username taht doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void searchForRetrievedEmailsBasedOnSubjectAndUsernameThatDoesntExist() {
 
         System.out.println("Test to search for retrieved emails based on subject and username doesnt exist");
@@ -327,7 +328,7 @@ class EmailManagerTest {
      * Test to search for retrieved emails based on subject that doesnt exist and username
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void searchForRetrievedEmailsBasedOnSubjectThatDoesntExistAndUsername() {
 
         System.out.println("Test to search for retrieved emails based on subject that doesnt exist and username ");
@@ -347,7 +348,7 @@ class EmailManagerTest {
      * Test to get received email based on username and id
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getContentOfParticularReceivedEmail() {
 
         System.out.println("Test to get received email based on username and id");
@@ -366,7 +367,7 @@ class EmailManagerTest {
      * Test to get received email based on username that doesnt exist and id
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getContentOfParticularReceivedEmailBasedOnUsernameThatDoesntExist() {
 
         System.out.println("Test to get received email based on username and id");
@@ -386,7 +387,7 @@ class EmailManagerTest {
      * Test to get received email based on username and id that doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getContentOfParticularReceivedEmailBasedOnEmailIdThatDoesntExist() {
 
         System.out.println("Test to get received email based on username and id that doesnt exist");
@@ -405,7 +406,7 @@ class EmailManagerTest {
      * Test to see received email exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfReceivedEmailIdExist() {
 
         System.out.println("Test to see received email exist");
@@ -422,7 +423,7 @@ class EmailManagerTest {
      * Test to see received email exist but id doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfReceivedEmailIdExistButIdDoesntExist() {
 
         System.out.println("Test to see received email exist but id doesntExist");
@@ -439,7 +440,7 @@ class EmailManagerTest {
      * Test to see received email exist but username doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfReceivedEmailIdExistButUsernameDoesntExist() {
 
         System.out.println("Test to see received email exist but username doesnt exist");
@@ -458,7 +459,7 @@ class EmailManagerTest {
      * Get sent email based on username and id
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getContentOfParticularSentEmail() {
 
         System.out.println("Get sent email based on username and id");
@@ -476,7 +477,7 @@ class EmailManagerTest {
      * Get sent email based on username and id doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getContentOfParticularSentEmailButIdDoesntExist() {
 
         System.out.println("Get sent email based on username and id doesnt exist");
@@ -495,7 +496,7 @@ class EmailManagerTest {
      * Test to see received email exist but username doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void  getContentOfParticularSentEmailButUsernameDoesntExist() {
 
         System.out.println("Test to see received email exist but username doesnt exist");
@@ -514,7 +515,7 @@ class EmailManagerTest {
     /**
      * Test to check if sent email exist
      */
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfSendEmailIdExist() {
 
         System.out.println("Test to see sent email exist");
@@ -532,7 +533,7 @@ class EmailManagerTest {
     /**
      * Test to check if sent email exist when id doesnt exist
      */
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfSendEmailIdExistWhenIdDoesntExist() {
 
         System.out.println("Test to see sent email exist when id doesnt exist");
@@ -551,7 +552,7 @@ class EmailManagerTest {
      * Test to see sent email exist but username doesnt exist
      */
 
-    @org.junit.jupiter.api.Test
+    @Test
     void checkIfSendEmailIdExistWhenUseranmeDoesntExist() {
 
         System.out.println("Test to see sent email exist when username doesnt exist");
