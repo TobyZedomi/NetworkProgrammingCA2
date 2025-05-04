@@ -1,7 +1,9 @@
 package client;
 
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import model.Email;
 import network.TCPNetworkLayer;
 import com.google.gson.Gson;
 
@@ -12,8 +14,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +26,14 @@ import lombok.extern.slf4j.Slf4j;
 public class TCPGUIClient {
 
     // Provide networking functionality
+
+    static JFrame f;
+
+    //lists
+    static JList b;
+
+    private JLabel emailListLabel;
+
 
     private TCPNetworkLayer network;
     Gson gson = new Gson();
@@ -943,6 +956,12 @@ public class TCPGUIClient {
         showCountView();
     }
 
+    private void goBackToHomePageEmailList(){
+
+        f.dispose();
+        showCountView();
+    }
+
     private void setRegisterButton(){
         String username = usernameTextField1.getText();
         String password = passwordTextField1.getText();
@@ -1050,6 +1069,13 @@ public class TCPGUIClient {
 
     }
 
+    public static String [] grow(String [] data, int numExtraSlots){
+        String [] larger = new String[data.length + numExtraSlots];
+        for(int i = 0; i < data.length; i++){
+            larger[i] = data[i];
+        }
+        return larger;
+    }
 
     private void retrieveEmailsForUser(){
 
@@ -1077,8 +1103,35 @@ public class TCPGUIClient {
             JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
             String result = jsonResponse.get("emails").getAsString();
 
-            JOptionPane.showMessageDialog(initialView, result, "Retrieve Emails",
-                    JOptionPane.INFORMATION_MESSAGE);
+            String[] emails = result.split("##");
+
+            //create a new frame
+            f = new JFrame("frame");
+
+            //create a panel
+            JPanel p =new JPanel();
+
+            emailListLabel = new JLabel("Retrieved email list");
+            p.add(emailListLabel, getGridBagConstraints(0, 0, 1));
+
+           String [] emailArray = grow(emails, emails.length);
+            b = new JList(emailArray);
+            b.setSelectedIndex(0);
+            p.add(b);
+            f.add(p);
+            f.setSize(500,400);
+
+            goBackToHomePage = new JButton("Go Back To Home Page");
+            // Specify what the button should DO when clicked:
+            goBackToHomePage.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    goBackToHomePageEmailList();
+                }
+            });
+            p.add(goBackToHomePage, getGridBagConstraints(0, 2, 2));
+            f.show();
+
         }
 
     }
@@ -1118,16 +1171,36 @@ public class TCPGUIClient {
             JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
             String result = jsonResponse.get("emails").getAsString();
 
-            JOptionPane.showMessageDialog(initialView, result, "Search retrieved emails based on subject",
-                    JOptionPane.INFORMATION_MESSAGE);
-            mainFrame.remove(searchEmailSubjectView);
-            showSearchEmailSubjectView();
+            String[] emails = result.split("##");
 
-            log.info("Emails wth subject {}", subject);
+            //create a new frame
+            f = new JFrame("frame");
+
+            //create a panel
+            JPanel p =new JPanel();
+
+            emailListLabel = new JLabel("Retrieved email list");
+            p.add(emailListLabel, getGridBagConstraints(0, 0, 1));
+
+            String [] emailArray = grow(emails, emails.length);
+            b = new JList(emailArray);
+            b.setSelectedIndex(0);
+            p.add(b);
+            f.add(p);
+            f.setSize(500,400);
+
+            goBackToHomePage = new JButton("Go Back To Home Page");
+            // Specify what the button should DO when clicked:
+            goBackToHomePage.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    goBackToHomePageEmailList();
+                }
+            });
+            p.add(goBackToHomePage, getGridBagConstraints(0, 2, 2));
+            f.show();
 
             subjectSearchTextField.setText("");
-
-            System.out.println(response);
 
         }
 

@@ -405,7 +405,6 @@ public class TCPEmailServer implements Runnable {
 
 
     public JsonObject serializeEmails(ArrayList<Email> emails) {
-
         JsonObject jsonResponse = null;
 
         StringJoiner joiner = new StringJoiner(UserUtilities.EMAIL_DELIMITER2);
