@@ -65,7 +65,7 @@ public class UserUtilities {
     public static final String DELIMITER = "%%";
     public static final String EMAIL_DELIMITER = ", ";
 
-    public static final String EMAIL_DELIMITER2 = " ## ";
+    public static final String EMAIL_DELIMITER2 = "  ";
 
 
 

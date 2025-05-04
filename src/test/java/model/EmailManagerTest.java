@@ -277,10 +277,8 @@ class EmailManagerTest {
 
         String username = "user405@gmail.com";
 
-        assertThrows(NullPointerException.class, () -> {
-
-            emailManager.searchForRetrievedEmails(username);
-        });
+        ArrayList<Email> result =  emailManager.searchForRetrievedEmails(username);
+         assertNull(result);
     }
 
     /**

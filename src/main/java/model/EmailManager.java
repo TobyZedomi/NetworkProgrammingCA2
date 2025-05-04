@@ -60,11 +60,11 @@ public class EmailManager implements IEmailManager {
 
     private boolean sendEmail(String sender, String receiver, Email email) {
         synchronized (senderEmails) {
-            if (senderEmails.containsKey(sender)) {
-                senderEmails.get(sender).add(email);
-                receiverEmails.get(receiver).add(email);
-                return true;
-            }
+                if (senderEmails.containsKey(sender)) {
+                    senderEmails.get(sender).add(email);
+                    receiverEmails.get(receiver).add(email);
+                    return true;
+                }
         }
         return false;
     }
@@ -223,6 +223,8 @@ public class EmailManager implements IEmailManager {
         senderEmails.put("user2@gmail.com", email3);
     }
 
+
+
     private void bootstrapReceiverEmailList(){
 
         ArrayList<Email> email = new ArrayList();
@@ -241,5 +243,7 @@ public class EmailManager implements IEmailManager {
         receiverEmails.put("user1@gmail.com", email2);
         receiverEmails.put("user2@gmail.com", email3);
     }
+
+
 
 }
