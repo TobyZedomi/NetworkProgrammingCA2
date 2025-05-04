@@ -51,7 +51,10 @@ public class UserUtilities {
 
     public static final String YOU_HAVE_NO_EMAILS = "YOU_HAVE_NO_EMAILS";
 
-    public static final String EMAIL_RETREIEVED_SUCCESSFULLY = "EMAIL_RETREIEVED_SUCCESSFULLY";
+    public static final String EMAILS_RETRIEVED_SUCCESSFULLY = "EMAILS_RETRIEVED_SUCCESSFULLY";
+
+    public static final String EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY = "EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY";
+
 
     public static final String NO_EMAILS_WITH_THIS_SUBJECT = "NO_EMAILS_WITH_THIS_SUBJECT";
 
