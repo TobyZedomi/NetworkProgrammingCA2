@@ -12,7 +12,7 @@ public class EmailManager implements IEmailManager {
     private Map<String, ArrayList<Email>> senderEmails = new ConcurrentHashMap<>();
     private Map<String, ArrayList<Email>> receiverEmails = new ConcurrentHashMap<>();
     private final Object emailCountLock = new Object();
-    private static int emailIdCount = 0;
+    private static int emailIdCount = 1;
 
     public EmailManager() {
 
@@ -21,36 +21,8 @@ public class EmailManager implements IEmailManager {
         bootstrapReceiverEmailList();
     }
 
-    // Add
-
-    /**
-     * Adding an username to an arraylist
-     * @param username is the username being added
-     * @return true if added and false if not added
-     */
-
-    public boolean addEmail(String username){
-
-        ArrayList<Email> emailList = new ArrayList<>();
-
-        return add(username, emailList);
-    }
-
-    /**
-     * Adding an arraylist and username to the receiver and sender hashmap
-     * @param username is the key being added to the hashmap
-     * @param emailList is the arraylist of emails being added as the value
-     * @return true if added and false if not added
-     */
-    private boolean add(String username, ArrayList<Email> emailList){
-        boolean added = false;
-        if(!senderEmails.containsKey(username)) {
-            added = true;
-            senderEmails.put(username, emailList);
-            receiverEmails.put(username, emailList);
-        }
-        return added;
-    }
+  
+   
 
 
 
@@ -87,11 +59,11 @@ public class EmailManager implements IEmailManager {
      */
     private boolean sendEmail(String sender, String receiver, Email email) {
         synchronized (senderEmails) {
-            if (senderEmails.containsKey(sender)) {
-                senderEmails.get(sender).add(email);
-                receiverEmails.get(receiver).add(email);
-                return true;
-            }
+                if (senderEmails.containsKey(sender)) {
+                    senderEmails.get(sender).add(email);
+                    receiverEmails.get(receiver).add(email);
+                    return true;
+                }
         }
         return false;
     }
@@ -138,15 +110,9 @@ public class EmailManager implements IEmailManager {
 
     public ArrayList<Email> searchForRetrievedEmails(String username){
 
-        ArrayList<Email> retrievedEmails = new ArrayList<>();
+        ArrayList<Email> emails = receiverEmails.get(username);
 
-        ArrayList<Email> email = receiverEmails.get(username);
-
-                for (int i = 0; i < email.size(); i++) {
-
-                    retrievedEmails.add(email.get(i));
-                }
-        return retrievedEmails;
+        return emails;
     }
 
 
@@ -301,6 +267,8 @@ public class EmailManager implements IEmailManager {
         senderEmails.put("user2@gmail.com", email3);
     }
 
+
+
     private void bootstrapReceiverEmailList(){
 
         ArrayList<Email> email = new ArrayList();
@@ -319,5 +287,7 @@ public class EmailManager implements IEmailManager {
         receiverEmails.put("user1@gmail.com", email2);
         receiverEmails.put("user2@gmail.com", email3);
     }
+
+
 
 }

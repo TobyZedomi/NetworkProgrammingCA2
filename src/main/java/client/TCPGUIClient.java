@@ -801,9 +801,14 @@ public class TCPGUIClient {
 
         String response = network.receive();
 
+        System.out.println(response);
+
+        JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+        String result = jsonResponse.get("message").getAsString();
+
         // If the response matches the expected success message, treat user as authenticated
         if (response.equals(AuthUtils.LOGIN_SUCCESSFUL)) {
-            JOptionPane.showMessageDialog(initialView, response, "Login Successful",
+            JOptionPane.showMessageDialog(initialView, result, "Login Successful",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(initialView);
             showCountView();
@@ -816,9 +821,9 @@ public class TCPGUIClient {
             return;
         }
 
-        if (response.equals(AuthUtils.ACK)){
+        if (response.equals(AuthUtils.GOODBYE)){
 
-            JOptionPane.showMessageDialog(initialView, response, "Login Failed",
+            JOptionPane.showMessageDialog(initialView, result, "GoodBye",
                     JOptionPane.ERROR_MESSAGE);
             try {
                 network.disconnect();
@@ -830,7 +835,7 @@ public class TCPGUIClient {
             System.exit(0);
         }
 
-        JOptionPane.showMessageDialog(initialView, response, "Login Failed",
+        JOptionPane.showMessageDialog(initialView, result, "Login Failed",
                 JOptionPane.ERROR_MESSAGE);
 
         log.info("User {} failed logged in", username);
@@ -962,10 +967,14 @@ public class TCPGUIClient {
         // Wait to receive a response to the authentication request
         String response = network.receive();
 
+        // formatting it nice for the user
+        JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+        String result = jsonResponse.get("message").getAsString();
+
 
         if (response.equalsIgnoreCase(AuthUtils.REGISTER_SUCCESSFUL)) {
 
-            JOptionPane.showMessageDialog(initialView, "You have successfully registered a user!", "Register Successful",
+            JOptionPane.showMessageDialog(initialView, result, "Register Successful",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(registerView);
             showCountView();
@@ -980,7 +989,7 @@ public class TCPGUIClient {
             return;
 
         }
-        JOptionPane.showMessageDialog(initialView, response, "Register Failed",
+        JOptionPane.showMessageDialog(initialView, result, "Register Failed",
                 JOptionPane.ERROR_MESSAGE);
         log.info("User {} failed registration", username);
 
@@ -1013,9 +1022,13 @@ public class TCPGUIClient {
         // Wait to receive a response to the authentication request
         String response = network.receive();
 
+        // formatting it nice for the user
+        JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+        String result = jsonResponse.get("message").getAsString();
+
         if (response.equalsIgnoreCase(AuthUtils.EMAIL_SUCCESSFULLY_SENT)) {
 
-            JOptionPane.showMessageDialog(initialView, response, "Sent email Successful",
+            JOptionPane.showMessageDialog(initialView, result, "Sent email Successful",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(sendEmailView);
             showSendEmailView();
@@ -1031,7 +1044,7 @@ public class TCPGUIClient {
             return;
 
         }
-        JOptionPane.showMessageDialog(initialView, response, "Sent email failed",
+        JOptionPane.showMessageDialog(initialView, result, "Sent email failed",
                 JOptionPane.ERROR_MESSAGE);
         log.info("Email was not sent to user {}", receiverEmail);
 
@@ -1051,8 +1064,22 @@ public class TCPGUIClient {
         // Wait to receive a response to the authentication request
         String response = network.receive();
 
-        JOptionPane.showMessageDialog(initialView, response, "Retrieve Emails",
-                JOptionPane.INFORMATION_MESSAGE);
+
+        if (response.equalsIgnoreCase(AuthUtils.INVALID) || response.equalsIgnoreCase(AuthUtils.YOU_HAVE_NO_EMAILS) || response.equalsIgnoreCase(AuthUtils.NOT_LOGGED_IN)){
+
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result1 = jsonResponse1.get("status").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result1, "Retrieve Emails failed",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        }else {
+            JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+            String result = jsonResponse.get("emails").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result, "Retrieve Emails",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
 
     }
 
@@ -1077,15 +1104,21 @@ public class TCPGUIClient {
 
         // Wait to receive a response to the authentication request
         String response = network.receive();
+        if (response.equalsIgnoreCase(AuthUtils.NO_EMAILS_WITH_THIS_SUBJECT) || response.equals(AuthUtils.INVALID) || response.equals(AuthUtils.YOU_HAVE_NO_EMAILS) || response.equals(AuthUtils.NOT_LOGGED_IN)) {
 
-        if (response.equalsIgnoreCase(AuthUtils.NO_EMAILS_WITH_THIS_SUBJECT)) {
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result1 = jsonResponse1.get("message").getAsString();
 
-            JOptionPane.showMessageDialog(initialView, response, "No Emails with this subject",
+            JOptionPane.showMessageDialog(initialView, result1, "No Emails with this subject",
                     JOptionPane.ERROR_MESSAGE);
 
             log.info("No emails with subject {}", subject);
         }else {
-            JOptionPane.showMessageDialog(initialView, response, "Search retrieved emails based on subject",
+            // formatting it nice for the user
+            JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+            String result = jsonResponse.get("emails").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result, "Search retrieved emails based on subject",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(searchEmailSubjectView);
             showSearchEmailSubjectView();
@@ -1123,12 +1156,19 @@ public class TCPGUIClient {
         // Wait to receive a response to the authentication request
         String response = network.receive();
 
-        if (response.equalsIgnoreCase(AuthUtils.NON_NUMERIC_ID) || response.equalsIgnoreCase(AuthUtils.EMAIL_ID_DOESNT_EXIST)) {
+        if (response.equalsIgnoreCase(AuthUtils.NON_NUMERIC_ID) || response.equalsIgnoreCase(AuthUtils.EMAIL_ID_DOESNT_EXIST) || response.equalsIgnoreCase(AuthUtils.INVALID) || response.equalsIgnoreCase(AuthUtils.NOT_LOGGED_IN)) {
 
-            JOptionPane.showMessageDialog(initialView, response, "Error",
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result1 = jsonResponse1.get("message").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result1, "Error",
                     JOptionPane.ERROR_MESSAGE);
         }else {
-            JOptionPane.showMessageDialog(initialView, response, "Get content of retrieved emails",
+
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result = jsonResponse1.get("content").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result, "Get content of retrieved emails",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(searchEmailSubjectView);
             showGetContentRetreivedView();
@@ -1161,12 +1201,19 @@ public class TCPGUIClient {
         // Wait to receive a response to the authentication request
         String response = network.receive();
 
-        if (response.equalsIgnoreCase(AuthUtils.NON_NUMERIC_ID) || response.equalsIgnoreCase(AuthUtils.EMAIL_ID_DOESNT_EXIST)) {
+        if (response.equalsIgnoreCase(AuthUtils.NON_NUMERIC_ID) || response.equalsIgnoreCase(AuthUtils.EMAIL_ID_DOESNT_EXIST) || response.equalsIgnoreCase(AuthUtils.INVALID) || response.equalsIgnoreCase(AuthUtils.NOT_LOGGED_IN)) {
 
-            JOptionPane.showMessageDialog(initialView, response, "Error",
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result1 = jsonResponse1.get("message").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result1, "Error",
                     JOptionPane.ERROR_MESSAGE);
         }else {
-            JOptionPane.showMessageDialog(initialView, response, "Get content of retrieved emails",
+
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result = jsonResponse1.get("content").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result, "Get content of retrieved emails",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(contentSentEmailsView);
             showGetContentSentView();
