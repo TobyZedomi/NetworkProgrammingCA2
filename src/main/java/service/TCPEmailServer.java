@@ -64,7 +64,7 @@ public class TCPEmailServer implements Runnable {
                             break;
                         case UserUtilities.LOGIN:
                             jsonResponse = loginUser(jsonRequest, userManager, username);
-                            if (jsonResponse == createStatusResponse(UserUtilities.LOGIN_SUCCESSFUL)) {
+                            if (jsonResponse == createStatusResponse(UserUtilities.LOGIN_SUCCESSFUL, "Login Successful")) {
                                 loginStatus = true;
                             }
                             break;
@@ -84,7 +84,7 @@ public class TCPEmailServer implements Runnable {
                             jsonResponse = getContentOfParticularSentEmail(loginStatus, jsonRequest, emailManager);
                             break;
                         case UserUtilities.EXIT:
-                            jsonResponse = createStatusResponse(UserUtilities.ACK);
+                            jsonResponse = createStatusResponse(UserUtilities.GOODBYE, "Goodbye");
                             validClientSession = false;
                             break;
                     }
@@ -92,7 +92,7 @@ public class TCPEmailServer implements Runnable {
                 }
 
                 if (jsonResponse == null) {
-                    jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                    jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                 }
 
                 String response = gson.toJson(jsonResponse);
@@ -132,20 +132,20 @@ public class TCPEmailServer implements Runnable {
                         log.info("User {} got content of email with the ID {} ", username, Id);
 
                     }else{
-                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST);
+                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
                         log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
                     }
                 }catch (NumberFormatException ex){
-                    jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID);
+                    jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
                     log.info("User {} entered a non numeric id", username);
                 }
 
             }else{
-                jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             }
 
         }else{
-            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
 
             log.info("{} is not logged in", username);
 
@@ -174,21 +174,21 @@ public class TCPEmailServer implements Runnable {
                         log.info("User {} got content of email with the ID {} ", username, Id);
 
                     }else{
-                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST);
+                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
                         log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
 
                     }
                 }catch (NumberFormatException ex){
-                    jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID);
+                    jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
                     log.info("User {} entered a non numeric id", username);
                 }
 
             }else{
-                jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             }
 
         }else {
-            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
             log.info("{} is not logged in", username);
 
         }
@@ -210,19 +210,19 @@ public class TCPEmailServer implements Runnable {
                             jsonResponse = serializeEmails(emailsForUserBasedOnSubject);
                         log.info("User {} searched for emails with subject {} ", username, subject);
                     } else {
-                        jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                        jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                     }
                 } else {
-                    jsonResponse = createStatusResponse(UserUtilities.NO_EMAILS_WITH_THIS_SUBJECT);
+                    jsonResponse = createStatusResponse(UserUtilities.NO_EMAILS_WITH_THIS_SUBJECT, "No emails with this subject");
                     log.info("User {} searched for emails with subject {} but it has no emails ", username, subject);
 
                 }
 
             } else {
-                jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             }
         } else {
-            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
             log.info("{} is not logged in", username);
         }
         return jsonResponse;
@@ -239,14 +239,14 @@ public class TCPEmailServer implements Runnable {
                     log.info("User {} retrieved all there emails ", username);
 
                 } else {
-                    jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                    jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                 }
             } else {
-                jsonResponse = createStatusResponse(UserUtilities.YOU_HAVE_NO_EMAILS);
+                jsonResponse = createStatusResponse(UserUtilities.YOU_HAVE_NO_EMAILS, "You have no emails");
                 log.info("User {} has no emails to retrieve ", username);
             }
         } else {
-            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
             log.info("{} is not logged in", username);
 
         }
@@ -280,24 +280,24 @@ public class TCPEmailServer implements Runnable {
                             if (checkIfReceiverExist == true) {
                                 emailManager.sendAnEmailToUser(sender, receiver, subject, content, date);
 
-                                jsonResponse = createStatusResponse(UserUtilities.EMAIL_SUCCESSFULLY_SENT);
+                                jsonResponse = createStatusResponse(UserUtilities.EMAIL_SUCCESSFULLY_SENT, "Email Successfully sent");
                                 log.info("User {} sent an email to User {} ", username, receiver);
                             } else {
-                                jsonResponse = createStatusResponse(UserUtilities.EMAIL_DONT_EXIST);
+                                jsonResponse = createStatusResponse(UserUtilities.EMAIL_DONT_EXIST, "Email entered doesnt exist");
                                 log.info("User {} tried to send an email but that email doesnt exist ", username);
                             }
                         } else {
-                            jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT);
+                            jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Must be in email format with @ and e.g .com at the end");
                         }
                     } else {
-                        jsonResponse = createStatusResponse(UserUtilities.INVALID_DATE_TIME);
+                        jsonResponse = createStatusResponse(UserUtilities.INVALID_DATE_TIME, "Date is incorrect");
                     }
                 } else {
-                    jsonResponse = createStatusResponse(UserUtilities.INVALID);
+                    jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                 }
         } else {
 
-            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN);
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
             log.info("{} is not logged in", username);
         }
         return jsonResponse;
@@ -330,27 +330,27 @@ public class TCPEmailServer implements Runnable {
 
                             userManager.registerUser(username, password);
                             emailManager.addEmail(username);
-                            jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL);
+                            jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL, "Registration Successful");
                             log.info("User {} successfully registered with us ", username);
                         } else {
-                            jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT);
+                            jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Username must be in email format with @ and e.g .com at the end");
                             log.info("User {} failed registration", username);
                         }
                     } else {
-                        jsonResponse = createStatusResponse(UserUtilities.INVALID_PASSWORD_FORMAT);
+                        jsonResponse = createStatusResponse(UserUtilities.INVALID_PASSWORD_FORMAT, "Password format must be 8 or more characters long, have at least 1 capital letter, 1 upper case and 1 special character");
                         log.info("User {} failed registration", username);
                     }
 
                 } else {
-                    jsonResponse = createStatusResponse(UserUtilities.PASSWORDS_DONT_MATCH);
+                    jsonResponse = createStatusResponse(UserUtilities.PASSWORDS_DONT_MATCH, "Passwords dont match");
                     log.info("User {} failed registration", username);
                 }
             } else {
-                jsonResponse = createStatusResponse(UserUtilities.USER_ALREADY_EXIST);
+                jsonResponse = createStatusResponse(UserUtilities.USER_ALREADY_EXIST, "User already exist");
                 log.info("User {} failed registration", username);
             }
         } else {
-            jsonResponse = createStatusResponse(UserUtilities.INVALID);
+            jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             log.info("User {} failed registration", username);
         }
         return jsonResponse;
@@ -369,15 +369,15 @@ public class TCPEmailServer implements Runnable {
             boolean loginUser = userManager.loginUser(email, password);
 
             if (loginUser == true) {
-                jsonResponse = createStatusResponse(UserUtilities.LOGIN_SUCCESSFUL);
+                jsonResponse = createStatusResponse(UserUtilities.LOGIN_SUCCESSFUL, "Login Successful");
                 log.info("User {} successfully logged in ", usernameLoggedIn);
             } else {
-                jsonResponse = createStatusResponse(UserUtilities.LOGIN_FAILED);
+                jsonResponse = createStatusResponse(UserUtilities.LOGIN_FAILED, "Login Failed");
                 log.info("User {} failed logged in", username);
 
             }
         } else {
-            jsonResponse = createStatusResponse(UserUtilities.INVALID);
+            jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             log.info("User {} failed logged in", username);
 
         }
@@ -411,9 +411,10 @@ public class TCPEmailServer implements Runnable {
     }
 
 
-    private static JsonObject createStatusResponse(String status) {
+    private static JsonObject createStatusResponse(String status, String message) {
         JsonObject invalidResponse = new JsonObject();
         invalidResponse.addProperty("status", status);
+        invalidResponse.addProperty("message", message);
         return invalidResponse;
     }
 

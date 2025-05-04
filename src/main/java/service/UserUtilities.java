@@ -58,7 +58,7 @@ public class UserUtilities {
     public static final String NON_NUMERIC_ID= "NON_NUMERIC_ID";
     public static final String EMAIL_ID_DOESNT_EXIST = "EMAIL_ID_DOESNT_EXIST";
 
-    public static final String ACK = "GOODBYE";
+    public static final String GOODBYE = "GOODBYE";
 
 
     // DELIMITERS
