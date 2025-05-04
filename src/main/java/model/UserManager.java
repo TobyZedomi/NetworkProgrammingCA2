@@ -24,6 +24,12 @@ public class UserManager implements IUserManager {
 
     // check if user already exist
 
+    /**
+     * Checking is username exist in hashmap
+     * @param username is the username being searched
+     * @return true if exist and false if it doesnt exist
+     */
+
     public boolean checkIfUserExist(String username){
         boolean match = false;
         if(!users.containsKey(username)) {
@@ -34,6 +40,13 @@ public class UserManager implements IUserManager {
 
     // register User
 
+    /**
+     * Register a user by adding there username and password to the hashmap
+     * @param username is the username being added
+     * @param password is the password being added
+     * @return true if registered and false if not added
+     */
+
     public boolean registerUser(String username, String password){
 
         User userToBeRegistered = new User(username,hashPassword(password));
@@ -41,6 +54,11 @@ public class UserManager implements IUserManager {
         return register(userToBeRegistered);
     }
 
+    /**
+     * Register a user based on if their username key doesn't already exist in hashmap
+     * @param u is the user being searched
+     * @return true if added and false if not added
+     */
     private boolean register(User u){
         boolean added = false;
         if(!users.containsKey(u.getUsername())) {
@@ -53,6 +71,12 @@ public class UserManager implements IUserManager {
 
     // check if passwords are the same
 
+    /**
+     * Check if passwords are the same
+     * @param password is the password being searched
+     * @param confirmPassword is the password being searched
+     * @return true if they match and false if they dont match
+     */
     public boolean checkIfPasswordsAreTheSame(String password, String confirmPassword){
 
         boolean match = false;
@@ -68,6 +92,12 @@ public class UserManager implements IUserManager {
 
     // check if password match regex
 
+    /**
+     * Check if password matches regex format
+     * @param password is the password being searched
+     * @param confirmPassword is the confirm password being searched
+     * @return true if match and false if no match
+     */
     public boolean checkIfPasswordsMatchRegex(String password, String confirmPassword){
 
         boolean match = false;
@@ -86,7 +116,11 @@ public class UserManager implements IUserManager {
 
     // check if email has correct regex
 
-
+    /**
+     * Check if its the right email format
+     * @param email is th email being searched
+     * @return truye if matches format and false if no match
+     */
 
     public boolean checkIfEmailMatchRegex(String email){
 
@@ -106,6 +140,12 @@ public class UserManager implements IUserManager {
 
     /// check if user is logged in
 
+    /**
+     * Login user based on if username and password match whats in the hashmap
+     * @param username is the username being searched
+     * @param password is the password being searched
+     * @return true if there is a match and false if no match
+     */
     public boolean loginUser(String username, String password){
 
         boolean match = false;
@@ -141,6 +181,12 @@ public class UserManager implements IUserManager {
 
     private static int workload = 12;
 
+    /**
+     * Hash the password based
+     * @param password_plaintext is the password being hashed
+     * @return hashed password
+     */
+
     public static String hashPassword(String password_plaintext) {
         String salt = BCrypt.gensalt(workload);
         String hashed_password = BCrypt.hashpw(password_plaintext, salt);
@@ -149,6 +195,12 @@ public class UserManager implements IUserManager {
         return(hashed_password);
     }
 
+    /**
+     * Check password matches hash password
+     * @param password_plaintext is the password being searched
+     * @param stored_hash is the hashed password being searched
+     * @return true if tehy match and false if they don't match
+     */
 
     private static boolean checkPassword(String password_plaintext, String stored_hash) {
         boolean password_verified = false;
