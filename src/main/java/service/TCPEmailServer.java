@@ -92,7 +92,10 @@ public class TCPEmailServer implements Runnable {
                             break;
                         case UserUtilities.GET_SENT_EMAIL_BY_ID:
                             jsonResponse = getSentEmailById(loginStatus, jsonRequest, emailManager);
-
+                            break;
+                        case UserUtilities.LOGOUT:
+                            jsonResponse = createStatusResponse(UserUtilities.GOODBYE, username+ " logged out of the system");
+                            loginStatus = false;
                             break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.GOODBYE, "Goodbye");

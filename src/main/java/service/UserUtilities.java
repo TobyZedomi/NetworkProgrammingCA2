@@ -24,6 +24,8 @@ public class UserUtilities {
     public static final String GET_RECEIVED_EMAIL_BY_ID = "GET_RECEIVED_EMAIL_BY_ID";
     public static final String GET_SENT_EMAIL_BY_ID = "GET_SENT_EMAIL_BY_ID";
 
+    public static final String LOGOUT = "LOGOUT";
+
 
 
     // Responses
