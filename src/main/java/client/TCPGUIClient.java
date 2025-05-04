@@ -1062,6 +1062,22 @@ public class TCPGUIClient {
 
     private void logOutUser(){
 
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.LOGOUT);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+        String result1 = jsonResponse1.get("message").getAsString();
+
+        JOptionPane.showMessageDialog(initialView, result1, "LogOut Email System",
+                JOptionPane.INFORMATION_MESSAGE);
+
         mainFrame.remove(homePageView);
         showInitialView();
     }
@@ -1114,6 +1130,22 @@ public class TCPGUIClient {
 
     private void logOutSendEmail(){
 
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.LOGOUT);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+        String result1 = jsonResponse1.get("message").getAsString();
+
+        JOptionPane.showMessageDialog(initialView, result1, "LogOut Email System",
+                JOptionPane.INFORMATION_MESSAGE);
+
         mainFrame.remove(sendEmailView);
         showInitialView();
     }
@@ -1121,11 +1153,43 @@ public class TCPGUIClient {
 
     private void logOutSearchEmail(){
 
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.LOGOUT);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+        String result1 = jsonResponse1.get("message").getAsString();
+
+        JOptionPane.showMessageDialog(initialView, result1, "LogOut Email System",
+                JOptionPane.INFORMATION_MESSAGE);
+
         mainFrame.remove(searchEmailSubjectView);
         showInitialView();
     }
 
     private void logOutGetContent(){
+
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.LOGOUT);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+        String result1 = jsonResponse1.get("message").getAsString();
+
+        JOptionPane.showMessageDialog(initialView, result1, "LogOut Email System",
+                JOptionPane.INFORMATION_MESSAGE);
 
         mainFrame.remove(contentReceivedEmailsView);
         showInitialView();
@@ -1133,17 +1197,65 @@ public class TCPGUIClient {
 
     private void logOutGetContentSent(){
 
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.LOGOUT);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+        String result1 = jsonResponse1.get("message").getAsString();
+
+        JOptionPane.showMessageDialog(initialView, result1, "LogOut Email System",
+                JOptionPane.INFORMATION_MESSAGE);
+
         mainFrame.remove(contentSentEmailsView);
         showInitialView();
     }
 
     private void logOutGetRetrievedEmailById(){
 
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.LOGOUT);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+        String result1 = jsonResponse1.get("message").getAsString();
+
+        JOptionPane.showMessageDialog(initialView, result1, "LogOut Email System",
+                JOptionPane.INFORMATION_MESSAGE);
+
         mainFrame.remove(getReceivedEmailByIdView);
         showInitialView();
     }
 
     private void logOutGetSentEmailById(){
+
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.LOGOUT);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+        String result1 = jsonResponse1.get("message").getAsString();
+
+        JOptionPane.showMessageDialog(initialView, result1, "LogOut Email System",
+                JOptionPane.INFORMATION_MESSAGE);
 
         mainFrame.remove(getSentEmailByIdView);
         showInitialView();
