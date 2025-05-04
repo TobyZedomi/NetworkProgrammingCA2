@@ -276,24 +276,32 @@ public class TCPEmailServer implements Runnable {
 
                     boolean checkEmailIsValidFormat = emailManager.checkIfEmailMatchRegex(receiver);
 
-                    if (!date.isAfter(LocalDateTime.now())) {
+                    if (receiver != null) {
+                        if (!receiver.isEmpty()) {
+                            if (!date.isAfter(LocalDateTime.now())) {
 
-                        if (checkEmailIsValidFormat == true) {
+                                if (checkEmailIsValidFormat == true) {
 
-                            if (checkIfReceiverExist == true) {
-                                emailManager.sendAnEmailToUser(sender, receiver, subject, content, date);
+                                    if (checkIfReceiverExist == true) {
+                                        emailManager.sendAnEmailToUser(sender, receiver, subject, content, date);
 
-                                jsonResponse = createStatusResponse(UserUtilities.EMAIL_SUCCESSFULLY_SENT, "Email Successfully sent");
-                                log.info("User {} sent an email to User {} ", username, receiver);
+                                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_SUCCESSFULLY_SENT, "Email Successfully sent");
+                                        log.info("User {} sent an email to User {} ", username, receiver);
+                                    } else {
+                                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_DONT_EXIST, "Email entered doesnt exist");
+                                        log.info("User {} tried to send an email but that email doesnt exist ", username);
+                                    }
+                                } else {
+                                    jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Must be in email format with @ and e.g .com at the end");
+                                }
                             } else {
-                                jsonResponse = createStatusResponse(UserUtilities.EMAIL_DONT_EXIST, "Email entered doesnt exist");
-                                log.info("User {} tried to send an email but that email doesnt exist ", username);
+                                jsonResponse = createStatusResponse(UserUtilities.INVALID_DATE_TIME, "Date is incorrect");
                             }
                         } else {
-                            jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Must be in email format with @ and e.g .com at the end");
+                            jsonResponse = createStatusResponse(UserUtilities.INVALID, "Must fill in who you are sending the email to");
                         }
-                    } else {
-                        jsonResponse = createStatusResponse(UserUtilities.INVALID_DATE_TIME, "Date is incorrect");
+                    }else {
+                        jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                     }
                 } else {
                     jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
@@ -325,33 +333,40 @@ public class TCPEmailServer implements Runnable {
 
             boolean checkEmailFormat = userManager.checkIfEmailMatchRegex(usernameReg);
 
-            if (checkIfUserExist == true) {
-                if (checkPasswordsMatch == true) {
+            if (usernameReg != null){
+                if (!usernameReg.isEmpty()) {
+                    if (checkIfUserExist == true) {
+                        if (checkPasswordsMatch == true) {
+                            if (checkPasswordFormat == true) {
+                                if (checkEmailFormat == true) {
 
-                    if (checkPasswordFormat == true) {
-                        if (checkEmailFormat == true) {
+                                    userManager.registerUser(usernameReg, password);
+                                    emailManager.addEmail(usernameReg);
+                                    username = usernameReg;
+                                    jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL, "Registration Successful");
+                                    log.info("User {} successfully registered with us ", usernameReg);
+                                } else {
+                                    jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Username must be in email format with @ and e.g .com at the end");
+                                    log.info("User {} failed registration", usernameReg);
+                                }
+                            } else {
+                                jsonResponse = createStatusResponse(UserUtilities.INVALID_PASSWORD_FORMAT, "Password format must be 8 or more characters long, have at least 1 capital letter, 1 upper case and 1 special character");
+                                log.info("User {} failed registration", usernameReg);
+                            }
 
-                            userManager.registerUser(usernameReg, password);
-                            emailManager.addEmail(usernameReg);
-                            username = usernameReg;
-                            jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL, "Registration Successful");
-                            log.info("User {} successfully registered with us ", usernameReg);
                         } else {
-                            jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Username must be in email format with @ and e.g .com at the end");
+                            jsonResponse = createStatusResponse(UserUtilities.PASSWORDS_DONT_MATCH, "Passwords dont match");
                             log.info("User {} failed registration", usernameReg);
                         }
                     } else {
-                        jsonResponse = createStatusResponse(UserUtilities.INVALID_PASSWORD_FORMAT, "Password format must be 8 or more characters long, have at least 1 capital letter, 1 upper case and 1 special character");
+                        jsonResponse = createStatusResponse(UserUtilities.USER_ALREADY_EXIST, "User already exist");
                         log.info("User {} failed registration", usernameReg);
                     }
-
                 } else {
-                    jsonResponse = createStatusResponse(UserUtilities.PASSWORDS_DONT_MATCH, "Passwords dont match");
-                    log.info("User {} failed registration", usernameReg);
+                    jsonResponse = createStatusResponse(UserUtilities.INVALID, "Cant leave username empty");
                 }
-            } else {
-                jsonResponse = createStatusResponse(UserUtilities.USER_ALREADY_EXIST, "User already exist");
-                log.info("User {} failed registration", usernameReg);
+            }else{
+                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             }
         } else {
             jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
