@@ -243,19 +243,19 @@ class EmailManagerTest {
     }
 
     /**
-     * Test to search for retrieved emails by username
+     * Test to search for Received emails by username
      */
 
     @Test
-    void searchForRetrievedEmails() {
+    void searchForReceivedEmails() {
 
-        System.out.println("Test to search for retrieved emails by username");
+        System.out.println("Test to search for Received emails by username");
 
         IEmailManager emailManager = new EmailManager();
 
         String username = "user@gmail.com";
 
-        ArrayList<Email> result = emailManager.searchForRetrievedEmails(username);
+        ArrayList<Email> result = emailManager.searchForReceivedEmails(username);
 
         ArrayList<Email> expectedResults = new ArrayList();
         expectedResults.add(new Email(1, "user1@gmail.com", "user@gmail.com", "Rock", "I Love Rock", LocalDateTime.of(2025, 02, 9, 5, 34)));
@@ -265,36 +265,36 @@ class EmailManagerTest {
     }
 
     /**
-     * Test to search for retrieved emails but username doesnt exist
+     * Test to search for Received emails but username doesnt exist
      */
 
     @Test
-    void searchForRetrievedEmailsButUsernameDoesntExist() {
+    void searchForReceivedEmailsButUsernameDoesntExist() {
 
-        System.out.println("Test to search for retrieved emails");
+        System.out.println("Test to search for Received emails");
 
         IEmailManager emailManager = new EmailManager();
 
         String username = "user405@gmail.com";
 
-        ArrayList<Email> result =  emailManager.searchForRetrievedEmails(username);
+        ArrayList<Email> result =  emailManager.searchForReceivedEmails(username);
          assertNull(result);
     }
 
     /**
-     * Test to search for retrieved emails based on subject and username
+     * Test to search for Received emails based on subject and username
      */
 
     @Test
-    void searchForRetrievedEmailsBasedOnSubjectAndUsername() {
+    void searchForReceivedEmailsBasedOnSubjectAndUsername() {
 
-        System.out.println("Test to search for retrieved emails based on subject and username");
+        System.out.println("Test to search for Received emails based on subject and username");
 
         IEmailManager emailManager = new EmailManager();
         String username = "user@gmail.com";
         String subject = "Rock";
 
-        ArrayList<Email> result = emailManager.searchForRetrievedEmailsBasedOnSubject(username, subject);
+        ArrayList<Email> result = emailManager.searchForReceivedEmailsBasedOnSubject(username, subject);
 
         ArrayList<Email> expectedResults = new ArrayList();
         expectedResults.add(new Email(1, "user1@gmail.com", "user@gmail.com", "Rock", "I Love Rock", LocalDateTime.of(2025, 02, 9, 5, 34)));
@@ -304,13 +304,13 @@ class EmailManagerTest {
 
 
     /**
-     * Test to search for retrieved emails based on subject and username taht doesnt exist
+     * Test to search for Received emails based on subject and username taht doesnt exist
      */
 
     @Test
-    void searchForRetrievedEmailsBasedOnSubjectAndUsernameThatDoesntExist() {
+    void searchForReceivedEmailsBasedOnSubjectAndUsernameThatDoesntExist() {
 
-        System.out.println("Test to search for retrieved emails based on subject and username doesnt exist");
+        System.out.println("Test to search for Received emails based on subject and username doesnt exist");
 
         IEmailManager emailManager = new EmailManager();
         String username = "user405@gmail.com";
@@ -318,7 +318,7 @@ class EmailManagerTest {
 
         assertThrows(NullPointerException.class, () -> {
 
-            emailManager.searchForRetrievedEmailsBasedOnSubject(username, subject);
+            emailManager.searchForReceivedEmailsBasedOnSubject(username, subject);
         });
     }
 
@@ -327,14 +327,14 @@ class EmailManagerTest {
      */
 
     @Test
-    void searchForRetrievedEmailsBasedOnSubjectThatDoesntExistAndUsername() {
+    void searchForReceivedEmailsBasedOnSubjectThatDoesntExistAndUsername() {
 
-        System.out.println("Test to search for retrieved emails based on subject that doesnt exist and username ");
+        System.out.println("Test to search for Received emails based on subject that doesnt exist and username ");
 
         IEmailManager emailManager = new EmailManager();
         String username = "user@gmail.com";
         String subject = "Hello";
-        ArrayList<Email> result = emailManager.searchForRetrievedEmailsBasedOnSubject(username, subject);
+        ArrayList<Email> result = emailManager.searchForReceivedEmailsBasedOnSubject(username, subject);
 
         ArrayList<Email> expectedResults = new ArrayList();
         expectedResults.add(new Email(1, "user1@gmail.com", "user@gmail.com", "Rock", "I Love Rock", LocalDateTime.of(2025, 02, 9, 5, 34)));

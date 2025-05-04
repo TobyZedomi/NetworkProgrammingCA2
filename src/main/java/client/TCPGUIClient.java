@@ -1,9 +1,7 @@
 package client;
 
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import model.Email;
 import network.TCPNetworkLayer;
 import com.google.gson.Gson;
 
@@ -14,11 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,11 +67,11 @@ public class TCPGUIClient {
 
     private JButton searchEmailsBasedOnSubject;
 
-    private JButton getContentOfRetreivedEmails;
+    private JButton getContentOfReceivedEmails;
 
     private JButton getContentOfSentEmails;
 
-    private JButton getRetrievedEmailById;
+    private JButton getReceivedEmailById;
 
     private JButton getSentEmailById;
 
@@ -138,9 +133,9 @@ public class TCPGUIClient {
     // get content of retrieved emails based on email Id
 
 
-    private JPanel contentRetreivedEmailsView;
+    private JPanel contentReceivedEmailsView;
 
-    private JButton getContentRetreivedEmailsButton;
+    private JButton getContentReceivedEmailsButton;
 
     private JLabel idLabel;
 
@@ -159,9 +154,9 @@ public class TCPGUIClient {
 
     // get retrieved email by id
 
-    private JPanel getRetreivedEmailByIdView;
+    private JPanel getReceivedEmailByIdView;
 
-    private JButton getRetreivedEmailByIdButton;
+    private JButton getReceivedEmailByIdButton;
 
     private JLabel emailIdLabel;
 
@@ -374,9 +369,9 @@ public class TCPGUIClient {
 
         // get content of retreived emails
 
-        getContentOfRetreivedEmails = new JButton("Get Content Of Particular retrieved Email ");
+        getContentOfReceivedEmails = new JButton("Get Content Of Particular retrieved Email ");
         // Specify what the button should DO when clicked:
-        getContentOfRetreivedEmails.addActionListener(new ActionListener() {
+        getContentOfReceivedEmails.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 goToGetContentRetreivedEmailPage();
@@ -395,9 +390,9 @@ public class TCPGUIClient {
         });
 
 
-        getRetrievedEmailById = new JButton("Get Retrieved Email By ID ");
+        getReceivedEmailById = new JButton("Get Retrieved Email By ID ");
         // Specify what the button should DO when clicked:
-        getRetrievedEmailById.addActionListener(new ActionListener() {
+        getReceivedEmailById.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 goToGetRetrievedEmilByIdPage();
@@ -433,11 +428,11 @@ public class TCPGUIClient {
 
         countCharView.add(searchEmailsBasedOnSubject, getGridBagConstraints(0, 4, 2));
 
-        countCharView.add(getContentOfRetreivedEmails, getGridBagConstraints(0, 5, 2));
+        countCharView.add(getContentOfReceivedEmails, getGridBagConstraints(0, 5, 2));
 
         countCharView.add(getContentOfSentEmails, getGridBagConstraints(0, 6, 2));
 
-        countCharView.add( getRetrievedEmailById, getGridBagConstraints(0, 7, 2));
+        countCharView.add(getReceivedEmailById, getGridBagConstraints(0, 7, 2));
 
         countCharView.add(getSentEmailById, getGridBagConstraints(0, 8, 2));
 
@@ -703,9 +698,9 @@ public class TCPGUIClient {
         // Create and configure the config panel
         // This will provide a view to take in the user credentials
         // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
-        contentRetreivedEmailsView = new JPanel(new GridBagLayout());
+        contentReceivedEmailsView = new JPanel(new GridBagLayout());
         // Register this panel as a container in the system
-        guiContainers.put("contentRetreivedEmailsView", contentRetreivedEmailsView);
+        guiContainers.put("contentRetreivedEmailsView", contentReceivedEmailsView);
 
 
         idLabel = new JLabel("Email ID: ");
@@ -713,12 +708,12 @@ public class TCPGUIClient {
 
 
         // Create a button to log in user
-        getContentRetreivedEmailsButton = new JButton("Get Content");
+        getContentReceivedEmailsButton = new JButton("Get Content");
         // Specify what the button should DO when clicked:
-        getContentRetreivedEmailsButton.addActionListener(new ActionListener() {
+        getContentReceivedEmailsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getContentRetreivedEmails();
+                getContentReceivedEmails();
             }
         });
 
@@ -744,16 +739,16 @@ public class TCPGUIClient {
 
 
 
-        contentRetreivedEmailsView.add(idLabel, getGridBagConstraints(0, 1, 1));
-        contentRetreivedEmailsView.add(idTextField, getGridBagConstraints(1, 1, 1));
+        contentReceivedEmailsView.add(idLabel, getGridBagConstraints(0, 1, 1));
+        contentReceivedEmailsView.add(idTextField, getGridBagConstraints(1, 1, 1));
 
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
-        contentRetreivedEmailsView.add(getContentRetreivedEmailsButton, getGridBagConstraints(0, 2, 2));
+        contentReceivedEmailsView.add(getContentReceivedEmailsButton, getGridBagConstraints(0, 2, 2));
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
-        contentRetreivedEmailsView.add(goBackToHomePage, getGridBagConstraints(0, 3, 2));
-        contentRetreivedEmailsView.add(logOut, getGridBagConstraints(0, 4, 2));
+        contentReceivedEmailsView.add(goBackToHomePage, getGridBagConstraints(0, 3, 2));
+        contentReceivedEmailsView.add(logOut, getGridBagConstraints(0, 4, 2));
     }
 
 
@@ -762,7 +757,7 @@ public class TCPGUIClient {
         // Add config panel to the main window and make it visible
         // mainFrame.remove(0);
 
-        mainFrame.add(contentRetreivedEmailsView);
+        mainFrame.add(contentReceivedEmailsView);
         mainFrame.setVisible(true);
     }
 
@@ -845,9 +840,9 @@ public class TCPGUIClient {
         // Create and configure the config panel
         // This will provide a view to take in the user credentials
         // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
-        getRetreivedEmailByIdView = new JPanel(new GridBagLayout());
+        getReceivedEmailByIdView = new JPanel(new GridBagLayout());
         // Register this panel as a container in the system
-        guiContainers.put("getRetreivedEmailByIdView", getRetreivedEmailByIdView);
+        guiContainers.put("getRetreivedEmailByIdView", getReceivedEmailByIdView);
 
 
         emailIdLabel = new JLabel("Email ID: ");
@@ -855,9 +850,9 @@ public class TCPGUIClient {
 
 
         // Create a button to log in user
-        getRetreivedEmailByIdButton = new JButton("Get Email");
+        getReceivedEmailByIdButton = new JButton("Get Email");
         // Specify what the button should DO when clicked:
-        getRetreivedEmailByIdButton.addActionListener(new ActionListener() {
+        getReceivedEmailByIdButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getRetrivedEmailById();
@@ -886,16 +881,16 @@ public class TCPGUIClient {
 
 
 
-        getRetreivedEmailByIdView.add(emailIdLabel, getGridBagConstraints(0, 1, 1));
-        getRetreivedEmailByIdView.add(emailIdTextField, getGridBagConstraints(1, 1, 1));
+        getReceivedEmailByIdView.add(emailIdLabel, getGridBagConstraints(0, 1, 1));
+        getReceivedEmailByIdView.add(emailIdTextField, getGridBagConstraints(1, 1, 1));
 
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
-        getRetreivedEmailByIdView.add(getRetreivedEmailByIdButton, getGridBagConstraints(0, 2, 2));
+        getReceivedEmailByIdView.add(getReceivedEmailByIdButton, getGridBagConstraints(0, 2, 2));
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
-        getRetreivedEmailByIdView.add(goBackToHomePage, getGridBagConstraints(0, 3, 2));
-        getRetreivedEmailByIdView.add(logOut, getGridBagConstraints(0, 4, 2));
+        getReceivedEmailByIdView.add(goBackToHomePage, getGridBagConstraints(0, 3, 2));
+        getReceivedEmailByIdView.add(logOut, getGridBagConstraints(0, 4, 2));
     }
 
 
@@ -904,7 +899,7 @@ public class TCPGUIClient {
         // Add config panel to the main window and make it visible
         // mainFrame.remove(0);
 
-        mainFrame.add( getRetreivedEmailByIdView);
+        mainFrame.add(getReceivedEmailByIdView);
         mainFrame.setVisible(true);
     }
 
@@ -1129,7 +1124,7 @@ public class TCPGUIClient {
 
     private void logOutGetContent(){
 
-        mainFrame.remove(contentRetreivedEmailsView);
+        mainFrame.remove(contentReceivedEmailsView);
         showInitialView();
     }
 
@@ -1141,7 +1136,7 @@ public class TCPGUIClient {
 
     private void logOutGetRetrievedEmailById(){
 
-        mainFrame.remove(getRetreivedEmailByIdView);
+        mainFrame.remove(getReceivedEmailByIdView);
         showInitialView();
     }
 
@@ -1168,7 +1163,7 @@ public class TCPGUIClient {
 
     private void goBackToHomePageGetContent(){
 
-        mainFrame.remove(contentRetreivedEmailsView);
+        mainFrame.remove(contentReceivedEmailsView);
         showCountView();
     }
 
@@ -1181,7 +1176,7 @@ public class TCPGUIClient {
 
     private void goBackToHomePageGetEmailByIdRetrieved(){
 
-        mainFrame.remove(getRetreivedEmailByIdView);
+        mainFrame.remove(getReceivedEmailByIdView);
         showCountView();
     }
 
@@ -1384,7 +1379,7 @@ public class TCPGUIClient {
         // Create the overall request object
         JsonObject requestJson = new JsonObject();
         // Add the request type/action and payload
-        requestJson.addProperty("action", AuthUtils.SEARCH_RETRIEVED_EMAILS);
+        requestJson.addProperty("action", AuthUtils.SEARCH_RECEIVED_EMAILS);
         requestJson.add("payload", payload);
 
         String request = gson.toJson(requestJson);
@@ -1445,7 +1440,7 @@ public class TCPGUIClient {
     // get content of retreived emails
 
 
-    private void getContentRetreivedEmails(){
+    private void getContentReceivedEmails(){
 
         String Id = idTextField.getText();
 
@@ -1455,7 +1450,7 @@ public class TCPGUIClient {
         // Create the overall request object
         JsonObject requestJson = new JsonObject();
         // Add the request type/action and payload
-        requestJson.addProperty("action", AuthUtils.GET_CONTENT_RETRIEVED_EMAILS);
+        requestJson.addProperty("action", AuthUtils.GET_CONTENT_RECEIVED_EMAILS);
         requestJson.add("payload", payload);
 
         String request = gson.toJson(requestJson);
@@ -1545,7 +1540,7 @@ public class TCPGUIClient {
         // Create the overall request object
         JsonObject requestJson = new JsonObject();
         // Add the request type/action and payload
-        requestJson.addProperty("action", AuthUtils.GET_RETRIEVED_EMAIL_BY_ID);
+        requestJson.addProperty("action", AuthUtils.GET_RECEIVED_EMAIL_BY_ID);
         requestJson.add("payload", payload);
 
         String request = gson.toJson(requestJson);

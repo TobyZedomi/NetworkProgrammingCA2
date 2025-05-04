@@ -78,63 +78,20 @@ public class TCPEmailServer implements Runnable {
                         case UserUtilities.RETRIEVE_EMAILS:
                             jsonResponse = retreiveEmails(loginStatus, emailManager);
                             break;
-                        case UserUtilities.SEARCH_RETRIEVED_EMAILS:
+                        case UserUtilities.SEARCH_RECEIVED_EMAILS:
                             jsonResponse = searchForretrivedEmailsBasedOnUsernameAndSubject(loginStatus, jsonRequest, emailManager);
                             break;
-                        case UserUtilities.GET_CONTENT_RETRIEVED_EMAILS:
+                        case UserUtilities.GET_CONTENT_RECEIVED_EMAILS:
                             jsonResponse = getContentOfRetreivedEmail(loginStatus, jsonRequest, emailManager);
                             break;
                         case UserUtilities.GET_CONTENT_SENT_EMAIL:
                             jsonResponse = getContentOfParticularSentEmail(loginStatus, jsonRequest, emailManager);
                             break;
-                        case UserUtilities.GET_RETRIEVED_EMAIL_BY_ID:
+                        case UserUtilities.GET_RECEIVED_EMAIL_BY_ID:
                             jsonResponse = getRetreivedEmilById(loginStatus, jsonRequest, emailManager);
                             break;
                         case UserUtilities.GET_SENT_EMAIL_BY_ID:
-                            if (!loginStatus) {
-
-                                JsonObject payload = (JsonObject) jsonRequest.get("payload");
-
-                                if (payload.size() == 1) {
-
-                                    try {
-                                        int Id = Integer.parseInt(payload.get("Id").getAsString());
-
-                                        boolean checkIfEmailIdExist = emailManager.checkIfSendEmailIdExist(username, Id);
-                                        boolean checkIdEntered = emailManager.checkIfIdIsLessThan1(Id);
-
-
-                                        Email email = emailManager.getSenderEmailBasedOnUsernameAndEmailId(username, Id);
-
-                                        if (checkIdEntered) {
-                                            if (checkIfEmailIdExist) {
-
-                                                jsonResponse = createStatusResponse2(UserUtilities.EMAIL_RETRIEVED_SUCCESSFULLY, serializeSentEmail(email));
-                                                log.info("User {} got content of email with the ID {} ", username, Id);
-
-                                            } else {
-                                                jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
-                                                log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
-                                            }
-                                        }else {
-                                            jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_LESS_THAN_1, "Email id cant be less than 1");
-                                            log.info("User {} tried to get email with the ID but less than 1, ID was {} ", username, Id);
-                                        }
-                                    } catch (NumberFormatException ex) {
-                                        jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
-                                        log.info("User {} entered a non numeric id", username);
-                                    }
-
-                                } else {
-                                    jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
-                                }
-
-                            } else {
-                                jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
-
-                                log.info("{} is not logged in", username);
-
-                            }
+                            jsonResponse = getSentEmailById(loginStatus, jsonRequest, emailManager);
 
                             break;
                         case UserUtilities.EXIT:
@@ -163,6 +120,55 @@ public class TCPEmailServer implements Runnable {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private JsonObject getSentEmailById(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
+        JsonObject jsonResponse;
+        if (!loginStatus) {
+
+            JsonObject payload = (JsonObject) jsonRequest.get("payload");
+
+            if (payload.size() == 1) {
+
+                try {
+                    int Id = Integer.parseInt(payload.get("Id").getAsString());
+
+                    boolean checkIfEmailIdExist = emailManager.checkIfSendEmailIdExist(username, Id);
+                    boolean checkIdEntered = emailManager.checkIfIdIsLessThan1(Id);
+
+
+                    Email email = emailManager.getSenderEmailBasedOnUsernameAndEmailId(username, Id);
+
+                    if (checkIdEntered) {
+                        if (checkIfEmailIdExist) {
+
+                            jsonResponse = createStatusResponse2(UserUtilities.EMAIL_RETRIEVED_SUCCESSFULLY, serializeSentEmail(email));
+                            log.info("User {} got content of email with the ID {} ", username, Id);
+
+                        } else {
+                            jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
+                            log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
+                        }
+                    }else {
+                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_LESS_THAN_1, "Email id cant be less than 1");
+                        log.info("User {} tried to get email with the ID but less than 1, ID was {} ", username, Id);
+                    }
+                } catch (NumberFormatException ex) {
+                    jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
+                    log.info("User {} entered a non numeric id", username);
+                }
+
+            } else {
+                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
+            }
+
+        } else {
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
+
+            log.info("{} is not logged in", username);
+
+        }
+        return jsonResponse;
     }
 
     private JsonObject getRetreivedEmilById(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
@@ -318,7 +324,7 @@ public class TCPEmailServer implements Runnable {
             if (payload.size() == 1) {
                 String subject = payload.get("subject").getAsString();
 
-                ArrayList<Email> emailsForUserBasedOnSubject = emailManager.searchForRetrievedEmailsBasedOnSubject(username, subject);
+                ArrayList<Email> emailsForUserBasedOnSubject = emailManager.searchForReceivedEmailsBasedOnSubject(username, subject);
 
                 if (!subject.isEmpty()) {
                     if (subject != null) {
@@ -354,7 +360,7 @@ public class TCPEmailServer implements Runnable {
     private JsonObject retreiveEmails(boolean loginStatus, IEmailManager emailManager) {
         JsonObject jsonResponse;
         if (!loginStatus) {
-            ArrayList<Email> emailsForUser = emailManager.searchForRetrievedEmails(username);
+            ArrayList<Email> emailsForUser = emailManager.searchForReceivedEmails(username);
 
             if (!emailsForUser.isEmpty()) {
                 if (emailsForUser != null) {

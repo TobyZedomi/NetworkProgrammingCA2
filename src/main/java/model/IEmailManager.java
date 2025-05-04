@@ -13,9 +13,9 @@ public interface IEmailManager {
 
      boolean checkIfEmailMatchRegex(String email);
 
-     ArrayList<Email> searchForRetrievedEmails(String username);
+     ArrayList<Email> searchForReceivedEmails(String username);
 
-     ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject);
+     ArrayList<Email> searchForReceivedEmailsBasedOnSubject(String username, String subject);
      Email getRecievedEmailBasedOnUsernameAndEmailId(String username, int emailId);
      boolean checkIfReceivedEmailIdExist(String username, int id);
 

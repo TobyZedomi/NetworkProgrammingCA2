@@ -15,12 +15,12 @@ public class AuthUtils {
 
     public static final String RETRIEVE_EMAILS = "RETRIEVE_EMAILS";
 
-    public static final String SEARCH_RETRIEVED_EMAILS = "SEARCH_RETRIEVED_EMAILS";
+    public static final String SEARCH_RECEIVED_EMAILS = "SEARCH_RECEIVED_EMAILS";
 
-    public static final String GET_CONTENT_RETRIEVED_EMAILS = "GET_CONTENT_RETRIEVED_EMAILS";
+    public static final String GET_CONTENT_RECEIVED_EMAILS = "GET_CONTENT_RECEIVED_EMAILS";
     public static final String GET_CONTENT_SENT_EMAIL = "GET_CONTENT_SENT_EMAIL";
 
-    public static final String GET_RETRIEVED_EMAIL_BY_ID = "GET_RETRIEVED_EMAIL_BY_ID";
+    public static final String GET_RECEIVED_EMAIL_BY_ID = "GET_RECEIVED_EMAIL_BY_ID";
 
     public static final String GET_SENT_EMAIL_BY_ID = "GET_SENT_EMAIL_BY_ID";
 
