@@ -87,6 +87,11 @@ public class TCPEmailServer implements Runnable {
                         case UserUtilities.GET_CONTENT_SENT_EMAIL:
                             jsonResponse = getContentOfParticularSentEmail(loginStatus, jsonRequest, emailManager);
                             break;
+                        case UserUtilities.GET_RETRIEVED_EMAIL_BY_ID:
+
+                            jsonResponse = getRetreivedEmilById(loginStatus, jsonRequest, emailManager);
+
+                            break;
                         case UserUtilities.EXIT:
                             jsonResponse = createStatusResponse(UserUtilities.GOODBYE, "Goodbye");
                             validClientSession = false;
@@ -113,6 +118,54 @@ public class TCPEmailServer implements Runnable {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private JsonObject getRetreivedEmilById(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
+        JsonObject jsonResponse;
+        if (!loginStatus) {
+
+            JsonObject payload = (JsonObject) jsonRequest.get("payload");
+
+            if (payload.size() == 1) {
+
+                try {
+                    int Id = Integer.parseInt(payload.get("Id").getAsString());
+
+                    boolean checkIfEmailIdExist = emailManager.checkIfReceivedEmailIdExist(username, Id);
+                    boolean checkIdEntered = emailManager.checkIfIdIsLessThan1(Id);
+
+                    Email email = emailManager.getRecievedEmailBasedOnUsernameAndEmailId(username, Id);
+
+                    if (checkIdEntered == true) {
+                        if (checkIfEmailIdExist) {
+
+                            jsonResponse = createStatusResponse2(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeReceivedEmail(email));
+                            log.info("User {} got content of email with the ID {} ", username, Id);
+
+                        } else {
+                            jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
+                            log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
+                        }
+                    }else{
+                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_LESS_THAN_1, "Email id cant be less than 1");
+                        log.info("User {} tried to get email with the ID but less than 1, ID was {} ", username, Id);
+
+                    }
+                } catch (NumberFormatException ex) {
+                    jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
+                    log.info("User {} entered a non numeric id", username);
+                }
+
+            } else {
+                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
+            }
+
+        } else {
+            jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
+            log.info("{} is not logged in", username);
+
+        }
+        return jsonResponse;
     }
 
     private JsonObject getContentOfParticularSentEmail(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
@@ -474,6 +527,13 @@ public class TCPEmailServer implements Runnable {
             throw new IllegalArgumentException("Cannot serialise null Movie");
         }
         return "ID: " + m.getID() + UserUtilities.EMAIL_DELIMITER + "Sender: " + m.getSender() + UserUtilities.EMAIL_DELIMITER + "Subject: " + m.getSubject() + UserUtilities.EMAIL_DELIMITER + "Date: " + m.getTimeStamp().toLocalDate();
+    }
+
+    public String serializeReceivedEmail(Email m) {
+        if (m == null) {
+            throw new IllegalArgumentException("Cannot serialise null Movie");
+        }
+        return "ID: " + m.getID() + UserUtilities.EMAIL_DELIMITER + "Sender: " + m.getSender() + UserUtilities.EMAIL_DELIMITER + "Subject: " + m.getSubject() + UserUtilities.EMAIL_DELIMITER + "Content:" +m.getContent() + UserUtilities.EMAIL_DELIMITER + "Date: " + m.getTimeStamp().toLocalDate();
     }
 
     public String serializeEmailContentOnly(Email email) {

@@ -20,6 +20,8 @@ public class AuthUtils {
     public static final String GET_CONTENT_RETRIEVED_EMAILS = "GET_CONTENT_RETRIEVED_EMAILS";
     public static final String GET_CONTENT_SENT_EMAIL = "GET_CONTENT_SENT_EMAIL";
 
+    public static final String GET_RETRIEVED_EMAIL_BY_ID = "GET_RETRIEVED_EMAIL_BY_ID";
+
 
 
     // RESPONSES

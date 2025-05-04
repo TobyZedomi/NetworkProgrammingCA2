@@ -76,6 +76,8 @@ public class TCPGUIClient {
 
     private JButton getContentOfSentEmails;
 
+    private JButton getRetrievedEmailById;
+
 
     private JPanel registerView;
     private JButton registerViewButton;
@@ -153,6 +155,16 @@ public class TCPGUIClient {
 
     private JTextField id2TextField;
 
+    // get retrieved email by id
+
+    private JPanel getRetreivedEmailByIdView;
+
+    private JButton getRetreivedEmailByIdButton;
+
+    private JLabel emailIdLabel;
+
+    private JTextField emailIdTextField;
+
     // Use constructor to establish the components (parts) of the GUI
     public TCPGUIClient() {
 
@@ -184,6 +196,10 @@ public class TCPGUIClient {
         // get content of sent emails
 
         configureGetContentSentEmail();
+
+        // get retrieved email by id
+
+        configureGetRetrievedEmailByID();
 
     }
 
@@ -362,6 +378,15 @@ public class TCPGUIClient {
         });
 
 
+        getRetrievedEmailById = new JButton("Get Retrieved Email By ID ");
+        // Specify what the button should DO when clicked:
+        getRetrievedEmailById.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goToGetRetrievedEmilByIdPage();
+            }
+        });
+
         // logout
 
         logOut = new JButton("Log Out");
@@ -385,7 +410,9 @@ public class TCPGUIClient {
 
         countCharView.add(getContentOfSentEmails, getGridBagConstraints(0, 6, 2));
 
-        countCharView.add(logOut, getGridBagConstraints(0, 7, 2));
+        countCharView.add( getRetrievedEmailById, getGridBagConstraints(0, 7, 2));
+
+        countCharView.add(logOut, getGridBagConstraints(0, 8, 2));
     }
 
     private void showInitialView(){
@@ -783,6 +810,75 @@ public class TCPGUIClient {
     }
 
 
+    // get retrieved email by id
+
+    private void configureGetRetrievedEmailByID(){
+        // Create and configure the config panel
+        // This will provide a view to take in the user credentials
+        // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
+        getRetreivedEmailByIdView = new JPanel(new GridBagLayout());
+        // Register this panel as a container in the system
+        guiContainers.put("getRetreivedEmailByIdView", getRetreivedEmailByIdView);
+
+
+        emailIdLabel = new JLabel("Email ID: ");
+        emailIdTextField = new JTextField(15);
+
+
+        // Create a button to log in user
+        getRetreivedEmailByIdButton = new JButton("Get Email");
+        // Specify what the button should DO when clicked:
+        getRetreivedEmailByIdButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getRetrivedEmailById();
+            }
+        });
+
+
+        goBackToHomePage = new JButton("Go Back To Home Page");
+        // Specify what the button should DO when clicked:
+        goBackToHomePage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goBackToHomePageGetEmailByIdRetrieved();
+            }
+        });
+
+
+        logOut = new JButton("LogOut");
+        // Specify what the button should DO when clicked:
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logOutGetRetrievedEmailById();
+            }
+        });
+
+
+
+        getRetreivedEmailByIdView.add(emailIdLabel, getGridBagConstraints(0, 1, 1));
+        getRetreivedEmailByIdView.add(emailIdTextField, getGridBagConstraints(1, 1, 1));
+
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        getRetreivedEmailByIdView.add(getRetreivedEmailByIdButton, getGridBagConstraints(0, 2, 2));
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        getRetreivedEmailByIdView.add(goBackToHomePage, getGridBagConstraints(0, 3, 2));
+        getRetreivedEmailByIdView.add(logOut, getGridBagConstraints(0, 4, 2));
+    }
+
+
+    private void showGetRetreivedEmailByIdView(){
+
+        // Add config panel to the main window and make it visible
+        // mainFrame.remove(0);
+
+        mainFrame.add( getRetreivedEmailByIdView);
+        mainFrame.setVisible(true);
+    }
+
 
 
     public void start() throws IOException {
@@ -895,6 +991,12 @@ public class TCPGUIClient {
     }
 
 
+    private void goToGetRetrievedEmilByIdPage(){
+
+        mainFrame.remove(countCharView);
+        showGetRetreivedEmailByIdView();
+    }
+
     private void goBackToLogin(){
 
         mainFrame.remove(registerView);
@@ -928,6 +1030,12 @@ public class TCPGUIClient {
         showInitialView();
     }
 
+    private void logOutGetRetrievedEmailById(){
+
+        mainFrame.remove(getRetreivedEmailByIdView);
+        showInitialView();
+    }
+
 
     private void goBackToHomePageSendEmail(){
 
@@ -953,6 +1061,12 @@ public class TCPGUIClient {
     private void goBackToHomePageGetContentSent(){
 
         mainFrame.remove(contentSentEmailsView);
+        showCountView();
+    }
+
+    private void goBackToHomePageGetEmailByIdRetrieved(){
+
+        mainFrame.remove(getRetreivedEmailByIdView);
         showCountView();
     }
 
@@ -1179,7 +1293,7 @@ public class TCPGUIClient {
             //create a panel
             JPanel p =new JPanel();
 
-            emailListLabel = new JLabel("Retrieved email list");
+            emailListLabel = new JLabel("Retrieved email list for the subject: "+subject);
             p.add(emailListLabel, getGridBagConstraints(0, 0, 1));
 
             String [] emailArray = grow(emails, emails.length);
@@ -1294,6 +1408,70 @@ public class TCPGUIClient {
             id2TextField.setText("");
 
             System.out.println(response);
+
+        }
+
+    }
+
+
+    private void getRetrivedEmailById(){
+
+        String Id = emailIdTextField.getText();
+
+        JsonObject payload = new JsonObject();
+        payload.addProperty("Id", Id);
+
+        // Create the overall request object
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.GET_RETRIEVED_EMAIL_BY_ID);
+        requestJson.add("payload", payload);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        if (response.equals(AuthUtils.NON_NUMERIC_ID) || response.equals(AuthUtils.EMAIL_ID_DOESNT_EXIST) || response.equals(AuthUtils.INVALID) || response.equals(AuthUtils.NOT_LOGGED_IN) || response.equals(AuthUtils.EMAIL_ID_LESS_THAN_1)) {
+
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result1 = jsonResponse1.get("message").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result1, "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }else {
+
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result = jsonResponse1.get("emails").getAsString();
+
+            //create a new frame
+            f = new JFrame("frame");
+            //create a panel
+            JPanel p =new JPanel();
+
+            emailListLabel = new JLabel("Email for ID: "+Id);
+            p.add(emailListLabel, getGridBagConstraints(0, 0, 1));
+
+            String [] emailArray = new String[]{result};
+            b = new JList(emailArray);
+            b.setSelectedIndex(0);
+            p.add(b);
+            f.add(p);
+            f.setSize(500,400);
+
+            goBackToHomePage = new JButton("Go Back To Home Page");
+            // Specify what the button should DO when clicked:
+            goBackToHomePage.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    goBackToHomePageEmailList();
+                }
+            });
+            p.add(goBackToHomePage, getGridBagConstraints(0, 2, 2));
+            f.show();
+
+            emailIdTextField.setText("");
 
         }
 
