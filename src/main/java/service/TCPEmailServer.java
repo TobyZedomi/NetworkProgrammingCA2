@@ -130,7 +130,7 @@ public class TCPEmailServer implements Runnable {
                     boolean checkIdEntered = emailManager.checkIfIdIsLessThan1(Id);
 
 
-                    Email email = emailManager.getContentOfParticularSentEmail(username, Id);
+                    Email email = emailManager.getSenderEmailBasedOnUsernameAndEmailId(username, Id);
 
                     if (checkIdEntered) {
                         if (checkIfEmailIdExist) {
@@ -178,7 +178,7 @@ public class TCPEmailServer implements Runnable {
                     boolean checkIfEmailIdExist = emailManager.checkIfReceivedEmailIdExist(username, Id);
                     boolean checkIdEntered = emailManager.checkIfIdIsLessThan1(Id);
 
-                    Email email = emailManager.getContentOfParticularReceivedEmail(username, Id);
+                    Email email = emailManager.getRecievedEmailBasedOnUsernameAndEmailId(username, Id);
 
                     if (checkIdEntered == true) {
                         if (checkIfEmailIdExist) {

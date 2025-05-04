@@ -191,7 +191,7 @@ public class EmailManager implements IEmailManager {
      * @return email that is found
      */
 
-    public Email getContentOfParticularReceivedEmail(String username, int emailId){
+    public Email getRecievedEmailBasedOnUsernameAndEmailId(String username, int emailId){
 
         ArrayList<Email> emails = receiverEmails.get(username);
 
@@ -243,7 +243,7 @@ public class EmailManager implements IEmailManager {
      * @return email that is found
      */
 
-    public Email getContentOfParticularSentEmail(String username, int emailId){
+    public Email getSenderEmailBasedOnUsernameAndEmailId(String username, int emailId){
 
         ArrayList<Email> emails = senderEmails.get(username);
 

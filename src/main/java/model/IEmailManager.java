@@ -16,10 +16,10 @@ public interface IEmailManager {
      ArrayList<Email> searchForRetrievedEmails(String username);
 
      ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject);
-     Email getContentOfParticularReceivedEmail(String username, int emailId);
+     Email getRecievedEmailBasedOnUsernameAndEmailId(String username, int emailId);
      boolean checkIfReceivedEmailIdExist(String username, int id);
 
-      Email getContentOfParticularSentEmail(String username, int emailId);
+      Email getSenderEmailBasedOnUsernameAndEmailId(String username, int emailId);
       boolean checkIfSendEmailIdExist(String username, int id);
       boolean checkIfIdIsLessThan1(int id);
 
