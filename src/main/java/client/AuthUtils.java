@@ -36,6 +36,8 @@ public class AuthUtils {
     public static final String NOT_LOGGED_IN =   "{\"status\":\"NOT_LOGGED_IN\",\"message\":\"Not logged in\"}";
 
 
+    public static final String EMPTY_SUBJECT =   "{\"status\":\"EMPTY_SUBJECT\",\"message\":\"Subject was left empty\"}";
+
     /// Delimiter
     public static final String DELIMITER = "%%";
 }

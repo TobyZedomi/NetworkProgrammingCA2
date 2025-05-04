@@ -12,6 +12,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.StringJoiner;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -116,7 +117,7 @@ public class TCPEmailServer implements Runnable {
 
     private JsonObject getContentOfParticularSentEmail(boolean loginStatus, JsonObject jsonRequest, IEmailManager emailManager) {
         JsonObject jsonResponse;
-        if (!loginStatus){
+        if (!loginStatus) {
 
             JsonObject payload = (JsonObject) jsonRequest.get("payload");
 
@@ -127,27 +128,27 @@ public class TCPEmailServer implements Runnable {
 
                     boolean checkIfEmailIdExist = emailManager.checkIfSendEmailIdExist(username, Id);
 
-                    Email email =  emailManager.getContentOfParticularSentEmail(username, Id);
+                    Email email = emailManager.getContentOfParticularSentEmail(username, Id);
 
-                    if (checkIfEmailIdExist){
+                    if (checkIfEmailIdExist) {
 
                         jsonResponse = createStatusResponseForContent(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeEmailContentOnly(email));
                         log.info("User {} got content of email with the ID {} ", username, Id);
 
-                    }else{
+                    } else {
                         jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
                         log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
                     }
-                }catch (NumberFormatException ex){
+                } catch (NumberFormatException ex) {
                     jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
                     log.info("User {} entered a non numeric id", username);
                 }
 
-            }else{
+            } else {
                 jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             }
 
-        }else{
+        } else {
             jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
 
             log.info("{} is not logged in", username);
@@ -169,28 +170,28 @@ public class TCPEmailServer implements Runnable {
 
                     boolean checkIfEmailIdExist = emailManager.checkIfReceivedEmailIdExist(username, Id);
 
-                  Email email =  emailManager.getContentOfParticularReceivedEmail(username, Id);
+                    Email email = emailManager.getContentOfParticularReceivedEmail(username, Id);
 
-                    if (checkIfEmailIdExist){
+                    if (checkIfEmailIdExist) {
 
                         jsonResponse = createStatusResponseForContent(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeEmailContentOnly(email));
                         log.info("User {} got content of email with the ID {} ", username, Id);
 
-                    }else{
+                    } else {
                         jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
                         log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
 
                     }
-                }catch (NumberFormatException ex){
+                } catch (NumberFormatException ex) {
                     jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
                     log.info("User {} entered a non numeric id", username);
                 }
 
-            }else{
+            } else {
                 jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             }
 
-        }else {
+        } else {
             jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
             log.info("{} is not logged in", username);
 
@@ -208,17 +209,25 @@ public class TCPEmailServer implements Runnable {
 
                 ArrayList<Email> emailsForUserBasedOnSubject = emailManager.searchForRetrievedEmailsBasedOnSubject(username, subject);
 
-                if (!emailsForUserBasedOnSubject.isEmpty()) {
-                    if (emailsForUserBasedOnSubject != null) {
-                            jsonResponse = serializeEmails(emailsForUserBasedOnSubject);
-                        log.info("User {} searched for emails with subject {} ", username, subject);
-                    } else {
+                if (!subject.isEmpty()) {
+                    if (subject != null) {
+                        if (!emailsForUserBasedOnSubject.isEmpty()) {
+                            if (emailsForUserBasedOnSubject != null) {
+                                jsonResponse = serializeEmails(emailsForUserBasedOnSubject);
+                                log.info("User {} searched for emails with subject {} ", username, subject);
+                            } else {
+                                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
+                            }
+                        } else {
+                            jsonResponse = createStatusResponse(UserUtilities.NO_EMAILS_WITH_THIS_SUBJECT, "No emails with this subject");
+                            log.info("User {} searched for emails with subject {} but it has no emails ", username, subject);
+
+                        }
+                    }else{
                         jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                     }
-                } else {
-                    jsonResponse = createStatusResponse(UserUtilities.NO_EMAILS_WITH_THIS_SUBJECT, "No emails with this subject");
-                    log.info("User {} searched for emails with subject {} but it has no emails ", username, subject);
-
+                }else{
+                    jsonResponse = createStatusResponse(UserUtilities.EMPTY_SUBJECT, "Subject was left empty");
                 }
 
             } else {
@@ -262,50 +271,50 @@ public class TCPEmailServer implements Runnable {
 
         if (!loginStatus) {
 
-                JsonObject payload = (JsonObject) jsonRequest.get("payload");
-                if (payload.size() == 3) {
+            JsonObject payload = (JsonObject) jsonRequest.get("payload");
+            if (payload.size() == 3) {
 
-                    String sender = username;
-                    String receiver = payload.get("receiver").getAsString();
-                    String subject = payload.get("subject").getAsString();
-                    String content = payload.get("content").getAsString();
-                    LocalDateTime date = LocalDateTime.now();
+                String sender = username;
+                String receiver = payload.get("receiver").getAsString();
+                String subject = payload.get("subject").getAsString();
+                String content = payload.get("content").getAsString();
+                LocalDateTime date = LocalDateTime.now();
 
 
-                    boolean checkIfReceiverExist = emailManager.checkIfReceiverExist(receiver);
+                boolean checkIfReceiverExist = emailManager.checkIfReceiverExist(receiver);
 
-                    boolean checkEmailIsValidFormat = emailManager.checkIfEmailMatchRegex(receiver);
+                boolean checkEmailIsValidFormat = emailManager.checkIfEmailMatchRegex(receiver);
 
-                    if (receiver != null) {
-                        if (!receiver.isEmpty()) {
-                            if (!date.isAfter(LocalDateTime.now())) {
+                if (receiver != null) {
+                    if (!receiver.isEmpty()) {
+                        if (!date.isAfter(LocalDateTime.now())) {
 
-                                if (checkEmailIsValidFormat == true) {
+                            if (checkEmailIsValidFormat == true) {
 
-                                    if (checkIfReceiverExist == true) {
-                                        emailManager.sendAnEmailToUser(sender, receiver, subject, content, date);
+                                if (checkIfReceiverExist == true) {
+                                    emailManager.sendAnEmailToUser(sender, receiver, subject, content, date);
 
-                                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_SUCCESSFULLY_SENT, "Email Successfully sent");
-                                        log.info("User {} sent an email to User {} ", username, receiver);
-                                    } else {
-                                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_DONT_EXIST, "Email entered doesnt exist");
-                                        log.info("User {} tried to send an email but that email doesnt exist ", username);
-                                    }
+                                    jsonResponse = createStatusResponse(UserUtilities.EMAIL_SUCCESSFULLY_SENT, "Email Successfully sent");
+                                    log.info("User {} sent an email to User {} ", username, receiver);
                                 } else {
-                                    jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Must be in email format with @ and e.g .com at the end");
+                                    jsonResponse = createStatusResponse(UserUtilities.EMAIL_DONT_EXIST, "Email entered doesnt exist");
+                                    log.info("User {} tried to send an email but that email doesnt exist ", username);
                                 }
                             } else {
-                                jsonResponse = createStatusResponse(UserUtilities.INVALID_DATE_TIME, "Date is incorrect");
+                                jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Must be in email format with @ and e.g .com at the end");
                             }
                         } else {
-                            jsonResponse = createStatusResponse(UserUtilities.INVALID, "Must fill in who you are sending the email to");
+                            jsonResponse = createStatusResponse(UserUtilities.INVALID_DATE_TIME, "Date is incorrect");
                         }
-                    }else {
-                        jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
+                    } else {
+                        jsonResponse = createStatusResponse(UserUtilities.INVALID, "Must fill in who you are sending the email to");
                     }
                 } else {
                     jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                 }
+            } else {
+                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
+            }
         } else {
 
             jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
@@ -333,39 +342,55 @@ public class TCPEmailServer implements Runnable {
 
             boolean checkEmailFormat = userManager.checkIfEmailMatchRegex(usernameReg);
 
-            if (usernameReg != null){
+            if (usernameReg != null) {
                 if (!usernameReg.isEmpty()) {
-                    if (checkIfUserExist == true) {
-                        if (checkPasswordsMatch == true) {
-                            if (checkPasswordFormat == true) {
-                                if (checkEmailFormat == true) {
+                    if (!password.isEmpty()) {
+                        if (password != null) {
+                            if(!confirmPassword.isEmpty()) {
+                                if (confirmPassword != null) {
+                                    if (checkIfUserExist == true) {
+                                        if (checkPasswordsMatch == true) {
+                                            if (checkPasswordFormat == true) {
+                                                if (checkEmailFormat == true) {
 
-                                    userManager.registerUser(usernameReg, password);
-                                    emailManager.addEmail(usernameReg);
-                                    username = usernameReg;
-                                    jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL, "Registration Successful");
-                                    log.info("User {} successfully registered with us ", usernameReg);
-                                } else {
-                                    jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Username must be in email format with @ and e.g .com at the end");
-                                    log.info("User {} failed registration", usernameReg);
+                                                    userManager.registerUser(usernameReg, password);
+                                                    emailManager.addEmail(usernameReg);
+                                                    username = usernameReg;
+                                                    jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL, "Registration Successful");
+                                                    log.info("User {} successfully registered with us ", usernameReg);
+                                                } else {
+                                                    jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Username must be in email format with @ and e.g .com at the end");
+                                                    log.info("User {} failed registration", usernameReg);
+                                                }
+                                            } else {
+                                                jsonResponse = createStatusResponse(UserUtilities.INVALID_PASSWORD_FORMAT, "Password format must be 8 or more characters long, have at least 1 capital letter, 1 upper case and 1 special character");
+                                                log.info("User {} failed registration", usernameReg);
+                                            }
+
+                                        } else {
+                                            jsonResponse = createStatusResponse(UserUtilities.PASSWORDS_DONT_MATCH, "Passwords dont match");
+                                            log.info("User {} failed registration", usernameReg);
+                                        }
+                                    } else {
+                                        jsonResponse = createStatusResponse(UserUtilities.USER_ALREADY_EXIST, "User already exist");
+                                        log.info("User {} failed registration", usernameReg);
+                                    }
+                                }else {
+                                    jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                                 }
-                            } else {
-                                jsonResponse = createStatusResponse(UserUtilities.INVALID_PASSWORD_FORMAT, "Password format must be 8 or more characters long, have at least 1 capital letter, 1 upper case and 1 special character");
-                                log.info("User {} failed registration", usernameReg);
+                            }else{
+                                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Cant leave confirm password empty");
                             }
-
-                        } else {
-                            jsonResponse = createStatusResponse(UserUtilities.PASSWORDS_DONT_MATCH, "Passwords dont match");
-                            log.info("User {} failed registration", usernameReg);
+                        }else{
+                            jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
                         }
-                    } else {
-                        jsonResponse = createStatusResponse(UserUtilities.USER_ALREADY_EXIST, "User already exist");
-                        log.info("User {} failed registration", usernameReg);
+                    }else{
+                        jsonResponse = createStatusResponse(UserUtilities.INVALID, "Cant leave password empty");
                     }
                 } else {
                     jsonResponse = createStatusResponse(UserUtilities.INVALID, "Cant leave username empty");
                 }
-            }else{
+            } else {
                 jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
             }
         } else {
@@ -387,13 +412,28 @@ public class TCPEmailServer implements Runnable {
 
             boolean loginUser = userManager.loginUser(email, password);
 
-            if (loginUser == true) {
-                jsonResponse = createStatusResponse(UserUtilities.LOGIN_SUCCESSFUL, "Login Successful");
-                log.info("User {} successfully logged in ", usernameLoggedIn);
+            if (!usernameLoggedIn.isEmpty()) {
+                if (usernameLoggedIn != null) {
+                    if (!password.isEmpty()) {
+                        if (password != null) {
+                            if (loginUser == true) {
+                                jsonResponse = createStatusResponse(UserUtilities.LOGIN_SUCCESSFUL, "Login Successful");
+                                log.info("User {} successfully logged in ", usernameLoggedIn);
+                            } else {
+                                jsonResponse = createStatusResponse(UserUtilities.LOGIN_FAILED, "Login Failed");
+                                log.info("User {} failed logged in", username);
+                            }
+                        }else{
+                            jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
+                        }
+                    }else {
+                        jsonResponse = createStatusResponse(UserUtilities.INVALID, "Cant leave password empty");
+                    }
+                } else {
+                    jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
+                }
             } else {
-                jsonResponse = createStatusResponse(UserUtilities.LOGIN_FAILED, "Login Failed");
-                log.info("User {} failed logged in", username);
-
+                jsonResponse = createStatusResponse(UserUtilities.INVALID, "Cant leave username empty");
             }
         } else {
             jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
