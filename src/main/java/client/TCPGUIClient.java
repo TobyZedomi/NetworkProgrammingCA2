@@ -78,6 +78,8 @@ public class TCPGUIClient {
 
     private JButton getRetrievedEmailById;
 
+    private JButton getSentEmailById;
+
 
     private JPanel registerView;
     private JButton registerViewButton;
@@ -165,6 +167,17 @@ public class TCPGUIClient {
 
     private JTextField emailIdTextField;
 
+    // get sent email by id
+
+    private JPanel getSentEmailByIdView;
+
+    private JButton getSentEmailByIdButton;
+
+    private JLabel emailSentIdLabel;
+
+    private JTextField emailSentIdTextField;
+
+
     // Use constructor to establish the components (parts) of the GUI
     public TCPGUIClient() {
 
@@ -201,6 +214,10 @@ public class TCPGUIClient {
 
         configureGetRetrievedEmailByID();
 
+        // get sent email by id
+
+        configureGetSentEmailByID();
+
     }
 
     private static GridBagConstraints getGridBagConstraints(int col, int row, int width) {
@@ -223,7 +240,7 @@ public class TCPGUIClient {
     private void configureMainWindow() {
         // Create the main frame - this is the main window
         mainFrame = new JFrame("Basic Sample GUI");
-        mainFrame.setSize(400, 300);
+        mainFrame.setSize(500, 400);
         // Set what should happen when the X button is clicked on the window
         // This approach will dispose of the main window but not shut down the program
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -387,6 +404,16 @@ public class TCPGUIClient {
             }
         });
 
+
+        getSentEmailById = new JButton("Get Sent Email By ID ");
+        // Specify what the button should DO when clicked:
+        getSentEmailById.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goToGetSentEmilByIdPage();
+            }
+        });
+
         // logout
 
         logOut = new JButton("Log Out");
@@ -412,7 +439,9 @@ public class TCPGUIClient {
 
         countCharView.add( getRetrievedEmailById, getGridBagConstraints(0, 7, 2));
 
-        countCharView.add(logOut, getGridBagConstraints(0, 8, 2));
+        countCharView.add(getSentEmailById, getGridBagConstraints(0, 8, 2));
+
+        countCharView.add(logOut, getGridBagConstraints(0, 9, 2));
     }
 
     private void showInitialView(){
@@ -881,6 +910,79 @@ public class TCPGUIClient {
 
 
 
+    // get sent email by id
+
+
+
+
+    private void  configureGetSentEmailByID(){
+        // Create and configure the config panel
+        // This will provide a view to take in the user credentials
+        // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
+        getSentEmailByIdView = new JPanel(new GridBagLayout());
+        // Register this panel as a container in the system
+        guiContainers.put("getSentEmailByIdView",  getSentEmailByIdView);
+
+
+        emailSentIdLabel = new JLabel("Email ID: ");
+        emailSentIdTextField = new JTextField(15);
+
+
+        // Create a button to log in user
+        getSentEmailByIdButton = new JButton("Get Email");
+        // Specify what the button should DO when clicked:
+        getSentEmailByIdButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getSentEmailById();
+            }
+        });
+
+
+        goBackToHomePage = new JButton("Go Back To Home Page");
+        // Specify what the button should DO when clicked:
+        goBackToHomePage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goBackToHomePageGetEmailByIdSent();
+            }
+        });
+
+
+        logOut = new JButton("LogOut");
+        // Specify what the button should DO when clicked:
+        logOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logOutGetSentEmailById();
+            }
+        });
+
+
+
+        getSentEmailByIdView.add(emailSentIdLabel, getGridBagConstraints(0, 1, 1));
+        getSentEmailByIdView.add(emailSentIdTextField, getGridBagConstraints(1, 1, 1));
+
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        getSentEmailByIdView.add( getSentEmailByIdButton, getGridBagConstraints(0, 2, 2));
+
+        // Add button on third row (y = 2) spanning two columns (width = 2)
+        getSentEmailByIdView.add(goBackToHomePage, getGridBagConstraints(0, 3, 2));
+        getSentEmailByIdView.add(logOut, getGridBagConstraints(0, 4, 2));
+    }
+
+
+    private void showGetSentEmailByIdView(){
+
+        // Add config panel to the main window and make it visible
+        // mainFrame.remove(0);
+
+        mainFrame.add(getSentEmailByIdView);
+        mainFrame.setVisible(true);
+    }
+
+
     public void start() throws IOException {
         network = new TCPNetworkLayer(AuthUtils.SERVER_HOST, AuthUtils.SERVER_PORT);
         network.connect();
@@ -997,6 +1099,13 @@ public class TCPGUIClient {
         showGetRetreivedEmailByIdView();
     }
 
+
+    private void goToGetSentEmilByIdPage(){
+
+        mainFrame.remove(countCharView);
+        showGetSentEmailByIdView();
+    }
+
     private void goBackToLogin(){
 
         mainFrame.remove(registerView);
@@ -1036,6 +1145,12 @@ public class TCPGUIClient {
         showInitialView();
     }
 
+    private void logOutGetSentEmailById(){
+
+        mainFrame.remove(getSentEmailByIdView);
+        showInitialView();
+    }
+
 
     private void goBackToHomePageSendEmail(){
 
@@ -1067,6 +1182,12 @@ public class TCPGUIClient {
     private void goBackToHomePageGetEmailByIdRetrieved(){
 
         mainFrame.remove(getRetreivedEmailByIdView);
+        showCountView();
+    }
+
+    private void goBackToHomePageGetEmailByIdSent(){
+
+        mainFrame.remove(getSentEmailByIdView);
         showCountView();
     }
 
@@ -1225,7 +1346,7 @@ public class TCPGUIClient {
             //create a panel
             JPanel p =new JPanel();
 
-            emailListLabel = new JLabel("Retrieved email list");
+            emailListLabel = new JLabel("List of all your received emails");
             p.add(emailListLabel, getGridBagConstraints(0, 0, 1));
 
            String [] emailArray = grow(emails, emails.length);
@@ -1472,6 +1593,70 @@ public class TCPGUIClient {
             f.show();
 
             emailIdTextField.setText("");
+
+        }
+    }
+
+
+
+    private void getSentEmailById(){
+
+        String Id = emailSentIdTextField.getText();
+
+        JsonObject payload = new JsonObject();
+        payload.addProperty("Id", Id);
+
+        // Create the overall request object
+        JsonObject requestJson = new JsonObject();
+        // Add the request type/action and payload
+        requestJson.addProperty("action", AuthUtils.GET_SENT_EMAIL_BY_ID);
+        requestJson.add("payload", payload);
+
+        String request = gson.toJson(requestJson);
+        network.send(request);
+
+        // Wait to receive a response to the authentication request
+        String response = network.receive();
+
+        if (response.equals(AuthUtils.NON_NUMERIC_ID) || response.equals(AuthUtils.EMAIL_ID_DOESNT_EXIST) || response.equals(AuthUtils.INVALID) || response.equals(AuthUtils.NOT_LOGGED_IN) || response.equals(AuthUtils.EMAIL_ID_LESS_THAN_1)) {
+
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result1 = jsonResponse1.get("message").getAsString();
+
+            JOptionPane.showMessageDialog(initialView, result1, "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }else {
+
+            JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+            String result = jsonResponse1.get("emails").getAsString();
+
+            //create a new frame
+            f = new JFrame("frame");
+            //create a panel
+            JPanel p =new JPanel();
+
+            emailListLabel = new JLabel("Sent Email for ID: "+Id);
+            p.add(emailListLabel, getGridBagConstraints(0, 0, 1));
+
+            String [] emailArray = new String[]{result};
+            b = new JList(emailArray);
+            b.setSelectedIndex(0);
+            p.add(b);
+            f.add(p);
+            f.setSize(500,400);
+
+            goBackToHomePage = new JButton("Go Back To Home Page");
+            // Specify what the button should DO when clicked:
+            goBackToHomePage.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    goBackToHomePageEmailList();
+                }
+            });
+            p.add(goBackToHomePage, getGridBagConstraints(0, 2, 2));
+            f.show();
+
+            emailSentIdTextField.setText("");
 
         }
 

@@ -88,8 +88,53 @@ public class TCPEmailServer implements Runnable {
                             jsonResponse = getContentOfParticularSentEmail(loginStatus, jsonRequest, emailManager);
                             break;
                         case UserUtilities.GET_RETRIEVED_EMAIL_BY_ID:
-
                             jsonResponse = getRetreivedEmilById(loginStatus, jsonRequest, emailManager);
+                            break;
+                        case UserUtilities.GET_SENT_EMAIL_BY_ID:
+                            if (!loginStatus) {
+
+                                JsonObject payload = (JsonObject) jsonRequest.get("payload");
+
+                                if (payload.size() == 1) {
+
+                                    try {
+                                        int Id = Integer.parseInt(payload.get("Id").getAsString());
+
+                                        boolean checkIfEmailIdExist = emailManager.checkIfSendEmailIdExist(username, Id);
+                                        boolean checkIdEntered = emailManager.checkIfIdIsLessThan1(Id);
+
+
+                                        Email email = emailManager.getSenderEmailBasedOnUsernameAndEmailId(username, Id);
+
+                                        if (checkIdEntered) {
+                                            if (checkIfEmailIdExist) {
+
+                                                jsonResponse = createStatusResponse2(UserUtilities.EMAIL_RETRIEVED_SUCCESSFULLY, serializeSentEmail(email));
+                                                log.info("User {} got content of email with the ID {} ", username, Id);
+
+                                            } else {
+                                                jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
+                                                log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
+                                            }
+                                        }else {
+                                            jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_LESS_THAN_1, "Email id cant be less than 1");
+                                            log.info("User {} tried to get email with the ID but less than 1, ID was {} ", username, Id);
+                                        }
+                                    } catch (NumberFormatException ex) {
+                                        jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
+                                        log.info("User {} entered a non numeric id", username);
+                                    }
+
+                                } else {
+                                    jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
+                                }
+
+                            } else {
+                                jsonResponse = createStatusResponse(UserUtilities.NOT_LOGGED_IN, "Not logged in");
+
+                                log.info("{} is not logged in", username);
+
+                            }
 
                             break;
                         case UserUtilities.EXIT:
@@ -139,7 +184,7 @@ public class TCPEmailServer implements Runnable {
                     if (checkIdEntered == true) {
                         if (checkIfEmailIdExist) {
 
-                            jsonResponse = createStatusResponse2(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeReceivedEmail(email));
+                            jsonResponse = createStatusResponse2(UserUtilities.EMAIL_RETRIEVED_SUCCESSFULLY, serializeReceivedEmail(email));
                             log.info("User {} got content of email with the ID {} ", username, Id);
 
                         } else {
@@ -534,6 +579,13 @@ public class TCPEmailServer implements Runnable {
             throw new IllegalArgumentException("Cannot serialise null Movie");
         }
         return "ID: " + m.getID() + UserUtilities.EMAIL_DELIMITER + "Sender: " + m.getSender() + UserUtilities.EMAIL_DELIMITER + "Subject: " + m.getSubject() + UserUtilities.EMAIL_DELIMITER + "Content:" +m.getContent() + UserUtilities.EMAIL_DELIMITER + "Date: " + m.getTimeStamp().toLocalDate();
+    }
+
+    public String serializeSentEmail(Email m) {
+        if (m == null) {
+            throw new IllegalArgumentException("Cannot serialise null Movie");
+        }
+        return "ID: " + m.getID() + UserUtilities.EMAIL_DELIMITER + "Recipient: " + m.getReceiver() + UserUtilities.EMAIL_DELIMITER + "Subject: " + m.getSubject() + UserUtilities.EMAIL_DELIMITER + "Content:" +m.getContent() + UserUtilities.EMAIL_DELIMITER + "Date: " + m.getTimeStamp().toLocalDate();
     }
 
     public String serializeEmailContentOnly(Email email) {

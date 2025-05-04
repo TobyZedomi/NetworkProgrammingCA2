@@ -22,6 +22,8 @@ public class UserUtilities {
 
     public static final String GET_CONTENT_SENT_EMAIL = "GET_CONTENT_SENT_EMAIL";
     public static final String GET_RETRIEVED_EMAIL_BY_ID = "GET_RETRIEVED_EMAIL_BY_ID";
+    public static final String GET_SENT_EMAIL_BY_ID = "GET_SENT_EMAIL_BY_ID";
+
 
 
     // Responses
@@ -65,7 +67,7 @@ public class UserUtilities {
     public static final String EMPTY_SUBJECT = "EMPTY_SUBJECT";
 
     public static final String EMAIL_ID_LESS_THAN_1 = "EMAIL_ID_LESS_THAN_1";
-
+    public static final String EMAIL_RETRIEVED_SUCCESSFULLY = "EMAIL_RETRIEVED_SUCCESSFULLY";
     public static final String GOODBYE = "GOODBYE";
 
 
