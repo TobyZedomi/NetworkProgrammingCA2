@@ -53,8 +53,8 @@ public class TCPGUIClient {
 
 
     // Panel for logged-in view
-    private JPanel countCharView;
-    private JButton countButton;
+    private JPanel homePageView;
+    private JButton homePageButton;
 
     private JButton logOut;
 
@@ -184,7 +184,7 @@ public class TCPGUIClient {
         configureInitialPanel();
 
         // Set up second panel
-        configureCountView();
+        configureHomePageView();
 
         // register view
 
@@ -321,15 +321,15 @@ public class TCPGUIClient {
 
     }
 
-    private void configureCountView(){
+    private void configureHomePageView(){
 
 
         // Create and configure the config panel
         // This will provide a view to take in the user credentials
         // Use a GridBag layout so we have a grid to work with, but there's some flexibility (button can span columns)
-        countCharView = new JPanel(new GridBagLayout());
+        homePageView = new JPanel(new GridBagLayout());
         // Register this panel as a container in the system
-        guiContainers.put("countCharView", countCharView);
+        guiContainers.put("homePageView", homePageView);
 
 
         // send email
@@ -345,7 +345,7 @@ public class TCPGUIClient {
 
         // send email
 
-        retrieveEmails = new JButton("Retrieve Emails");
+        retrieveEmails = new JButton("Retrieve Received Emails");
         // Specify what the button should DO when clicked:
         retrieveEmails.addActionListener(new ActionListener() {
             @Override
@@ -357,7 +357,7 @@ public class TCPGUIClient {
 
         // search emails
 
-        searchEmailsBasedOnSubject = new JButton("Search Retrieve Emails Based OnSubject");
+        searchEmailsBasedOnSubject = new JButton("Search Received Emails Based On Subject");
         // Specify what the button should DO when clicked:
         searchEmailsBasedOnSubject.addActionListener(new ActionListener() {
             @Override
@@ -369,7 +369,7 @@ public class TCPGUIClient {
 
         // get content of retreived emails
 
-        getContentOfReceivedEmails = new JButton("Get Content Of Particular retrieved Email ");
+        getContentOfReceivedEmails = new JButton("Get Content Of Particular received Email ");
         // Specify what the button should DO when clicked:
         getContentOfReceivedEmails.addActionListener(new ActionListener() {
             @Override
@@ -390,7 +390,7 @@ public class TCPGUIClient {
         });
 
 
-        getReceivedEmailById = new JButton("Get Retrieved Email By ID ");
+        getReceivedEmailById = new JButton("Get Received Email By ID ");
         // Specify what the button should DO when clicked:
         getReceivedEmailById.addActionListener(new ActionListener() {
             @Override
@@ -422,21 +422,21 @@ public class TCPGUIClient {
 
 
         // Add button on third row (y = 2) spanning two columns (width = 2)
-        countCharView.add(sendEmail, getGridBagConstraints(0, 2, 2));
+        homePageView.add(sendEmail, getGridBagConstraints(0, 2, 2));
 
-        countCharView.add(retrieveEmails, getGridBagConstraints(0, 3, 2));
+        homePageView.add(retrieveEmails, getGridBagConstraints(0, 3, 2));
 
-        countCharView.add(searchEmailsBasedOnSubject, getGridBagConstraints(0, 4, 2));
+        homePageView.add(searchEmailsBasedOnSubject, getGridBagConstraints(0, 4, 2));
 
-        countCharView.add(getContentOfReceivedEmails, getGridBagConstraints(0, 5, 2));
+        homePageView.add(getContentOfReceivedEmails, getGridBagConstraints(0, 5, 2));
 
-        countCharView.add(getContentOfSentEmails, getGridBagConstraints(0, 6, 2));
+        homePageView.add(getContentOfSentEmails, getGridBagConstraints(0, 6, 2));
 
-        countCharView.add(getReceivedEmailById, getGridBagConstraints(0, 7, 2));
+        homePageView.add(getReceivedEmailById, getGridBagConstraints(0, 7, 2));
 
-        countCharView.add(getSentEmailById, getGridBagConstraints(0, 8, 2));
+        homePageView.add(getSentEmailById, getGridBagConstraints(0, 8, 2));
 
-        countCharView.add(logOut, getGridBagConstraints(0, 9, 2));
+        homePageView.add(logOut, getGridBagConstraints(0, 9, 2));
     }
 
     private void showInitialView(){
@@ -445,12 +445,12 @@ public class TCPGUIClient {
         mainFrame.setVisible(true);
     }
 
-    private void showCountView(){
+    private void showHomePageView(){
 
         // Add config panel to the main window and make it visible
         // mainFrame.remove(0);
 
-        mainFrame.add(countCharView);
+        mainFrame.add(homePageView);
         mainFrame.setVisible(true);
     }
 
@@ -1017,7 +1017,7 @@ public class TCPGUIClient {
             JOptionPane.showMessageDialog(initialView, result, "Login Successful",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(initialView);
-            showCountView();
+            showHomePageView();
 
             log.info("User {} logged in", username);
 
@@ -1059,45 +1059,45 @@ public class TCPGUIClient {
 
     private void logOutUser(){
 
-        mainFrame.remove(countCharView);
+        mainFrame.remove(homePageView);
         showInitialView();
     }
 
     private void sendEmailPage(){
 
-        mainFrame.remove(countCharView);
+        mainFrame.remove(homePageView);
         showSendEmailView();
     }
 
     private void goToSearchEmailsPage(){
 
-        mainFrame.remove(countCharView);
+        mainFrame.remove(homePageView);
         showSearchEmailSubjectView();
     }
 
     private void goToGetContentRetreivedEmailPage(){
 
-        mainFrame.remove(countCharView);
+        mainFrame.remove(homePageView);
        showGetContentRetreivedView();
     }
 
     private void goToGetContentSentEmailPage(){
 
-        mainFrame.remove(countCharView);
+        mainFrame.remove(homePageView);
         showGetContentSentView();
     }
 
 
     private void goToGetRetrievedEmilByIdPage(){
 
-        mainFrame.remove(countCharView);
+        mainFrame.remove(homePageView);
         showGetRetreivedEmailByIdView();
     }
 
 
     private void goToGetSentEmilByIdPage(){
 
-        mainFrame.remove(countCharView);
+        mainFrame.remove(homePageView);
         showGetSentEmailByIdView();
     }
 
@@ -1150,46 +1150,46 @@ public class TCPGUIClient {
     private void goBackToHomePageSendEmail(){
 
         mainFrame.remove(sendEmailView);
-        showCountView();
+        showHomePageView();
     }
 
 
     private void goBackToHomePageSendEmail2(){
 
         mainFrame.remove(searchEmailSubjectView);
-        showCountView();
+        showHomePageView();
     }
 
 
     private void goBackToHomePageGetContent(){
 
         mainFrame.remove(contentReceivedEmailsView);
-        showCountView();
+        showHomePageView();
     }
 
 
     private void goBackToHomePageGetContentSent(){
 
         mainFrame.remove(contentSentEmailsView);
-        showCountView();
+        showHomePageView();
     }
 
     private void goBackToHomePageGetEmailByIdRetrieved(){
 
         mainFrame.remove(getReceivedEmailByIdView);
-        showCountView();
+        showHomePageView();
     }
 
     private void goBackToHomePageGetEmailByIdSent(){
 
         mainFrame.remove(getSentEmailByIdView);
-        showCountView();
+        showHomePageView();
     }
 
     private void goBackToHomePageEmailList(){
 
         f.dispose();
-        showCountView();
+        showHomePageView();
     }
 
     private void setRegisterButton(){
@@ -1226,7 +1226,7 @@ public class TCPGUIClient {
             JOptionPane.showMessageDialog(initialView, result, "Register Successful",
                     JOptionPane.INFORMATION_MESSAGE);
             mainFrame.remove(registerView);
-            showCountView();
+            showHomePageView();
 
             log.info("User {} registered successful", username);
 
