@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public interface IEmailManager {
 
-     boolean addEmail(String email);
+     boolean addEmail(String username);
 
      boolean sendAnEmailToUser(String sender, String receiver, String subject, String content, LocalDateTime dateTime);
 

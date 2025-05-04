@@ -23,19 +23,31 @@ public class EmailManager implements IEmailManager {
 
     // Add
 
-    public boolean addEmail(String email){
+    /**
+     * Adding an username to an arraylist
+     * @param username is the username being added
+     * @return true if added and false if not added
+     */
+
+    public boolean addEmail(String username){
 
         ArrayList<Email> emailList = new ArrayList<>();
 
-        return add(email, emailList);
+        return add(username, emailList);
     }
 
-    private boolean add(String email, ArrayList<Email> emailList){
+    /**
+     * Adding an arraylist and username to the receiver and sender hashmap
+     * @param username is the key being added to the hashmap
+     * @param emailList is the arraylist of emails being added as the value
+     * @return true if added and false if not added
+     */
+    private boolean add(String username, ArrayList<Email> emailList){
         boolean added = false;
-        if(!senderEmails.containsKey(email)) {
+        if(!senderEmails.containsKey(username)) {
             added = true;
-            senderEmails.put(email, emailList);
-            receiverEmails.put(email, emailList);
+            senderEmails.put(username, emailList);
+            receiverEmails.put(username, emailList);
         }
         return added;
     }
@@ -43,6 +55,16 @@ public class EmailManager implements IEmailManager {
 
 
     /// senderEmail an email
+
+    /**
+     * Sending an email to a particular user in the system
+     * @param sender is the user sending the email
+     * @param receiver is the user getting the email
+     * @param subject is what the email is about
+     * @param content is the message of the email
+     * @param dateTime is when the email was sent
+     * @return true if email was sent and true if not sent
+     */
     public boolean sendAnEmailToUser(String sender, String receiver, String subject, String content, LocalDateTime dateTime) {
         Email emailToBeSent;
         synchronized (emailCountLock) {
@@ -56,6 +78,13 @@ public class EmailManager implements IEmailManager {
 
     // get it based off the key, if exist i can just add it. Use add for the arraylist to put the email in
 
+    /**
+     * When sending an email it putd the email in both senderEmail and receiverEmail hashmap
+     * @param sender is the user sending the email
+     * @param receiver is the user receiving the email
+     * @param email is the email being sent
+     * @return true if email was added to hashmap and false if not
+     */
     private boolean sendEmail(String sender, String receiver, Email email) {
         synchronized (senderEmails) {
             if (senderEmails.containsKey(sender)) {
@@ -81,6 +110,12 @@ public class EmailManager implements IEmailManager {
 
     // check if email matches regex
 
+    /**
+     * Checking if email matches regex format
+     * @param email is the email being searched
+     * @return true if match and false if no match
+     */
+
     public boolean checkIfEmailMatchRegex(String email){
 
         boolean match = false;
@@ -94,6 +129,12 @@ public class EmailManager implements IEmailManager {
 
 
     // retrieve emails for the logged in user
+
+    /**
+     * Search for retrieved emails based on username
+     * @param username is the username being searched
+     * @return an arraylist of retrieved emails
+     */
 
     public ArrayList<Email> searchForRetrievedEmails(String username){
 
@@ -112,6 +153,12 @@ public class EmailManager implements IEmailManager {
 
     // search for email based on subject
 
+    /**
+     * Search for retrieved emails based on te subject and username
+     * @param username is the username being searched
+     * @param subject is the subject being searched
+     * @return an arraylist of retrieved emails based on username and subject
+     */
 
     public ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject){
 
@@ -132,6 +179,13 @@ public class EmailManager implements IEmailManager {
 
 
     // get the content of a particular email
+
+    /**
+     * Get the content of a particular email based on username and email id
+     * @param username is the username being searched
+     * @param emailId is the email being searched
+     * @return email that is found
+     */
 
     public Email getContentOfParticularReceivedEmail(String username, int emailId){
 
@@ -154,6 +208,13 @@ public class EmailManager implements IEmailManager {
 
     // check if email id exist
 
+    /**
+     * Check if the received email exist based on username and id
+     * @param username is the username being searched
+     * @param id is the id being searched
+     * @return true if found and false if not found
+     */
+
     public boolean checkIfReceivedEmailIdExist(String username, int id){
 
         ArrayList<Email> emails = receiverEmails.get(username);
@@ -171,6 +232,12 @@ public class EmailManager implements IEmailManager {
 
     /// get content of sentEmails
 
+    /**
+     * Get email based on username and id
+     * @param username is the username that is being searched
+     * @param emailId is the email id that s being searched
+     * @return email that is found
+     */
 
     public Email getContentOfParticularSentEmail(String username, int emailId){
 
@@ -192,6 +259,13 @@ public class EmailManager implements IEmailManager {
 
 
     // check if sender email id exist
+
+    /**
+     * Check if email sent email id exist based on username and id
+     * @param username is the username being searched
+     * @param id is the id being searched
+     * @return true if found and false if not found
+     */
 
     public boolean checkIfSendEmailIdExist(String username, int id){
 
