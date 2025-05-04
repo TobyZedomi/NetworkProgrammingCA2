@@ -1068,7 +1068,7 @@ public class TCPGUIClient {
         if (response.equalsIgnoreCase(AuthUtils.INVALID) || response.equalsIgnoreCase(AuthUtils.YOU_HAVE_NO_EMAILS) || response.equalsIgnoreCase(AuthUtils.NOT_LOGGED_IN)){
 
             JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
-            String result1 = jsonResponse1.get("status").getAsString();
+            String result1 = jsonResponse1.get("message").getAsString();
 
             JOptionPane.showMessageDialog(initialView, result1, "Retrieve Emails failed",
                     JOptionPane.INFORMATION_MESSAGE);

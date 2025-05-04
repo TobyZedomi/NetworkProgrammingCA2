@@ -61,6 +61,9 @@ public class TCPEmailServer implements Runnable {
                     switch (action) {
                         case UserUtilities.REGISTER:
                             jsonResponse = registerUser(jsonRequest, userManager, emailManager);
+                            if (jsonResponse == createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL, "Register Successful")) {
+                                loginStatus = true;
+                            }
                             break;
                         case UserUtilities.LOGIN:
                             jsonResponse = loginUser(jsonRequest, userManager, username);
@@ -309,18 +312,18 @@ public class TCPEmailServer implements Runnable {
         JsonObject payload = (JsonObject) jsonRequest.get("payload");
         if (payload.size() == 3) {
 
-            String username = payload.get("username").getAsString();
+            String usernameReg = payload.get("username").getAsString();
             String password = payload.get("password").getAsString();
             String confirmPassword = payload.get("confirmPassword").getAsString();
 
 
-            boolean checkIfUserExist = userManager.checkIfUserExist(username);
+            boolean checkIfUserExist = userManager.checkIfUserExist(usernameReg);
 
             boolean checkPasswordsMatch = userManager.checkIfPasswordsAreTheSame(password, confirmPassword);
 
             boolean checkPasswordFormat = userManager.checkIfPasswordsMatchRegex(password, confirmPassword);
 
-            boolean checkEmailFormat = userManager.checkIfEmailMatchRegex(username);
+            boolean checkEmailFormat = userManager.checkIfEmailMatchRegex(usernameReg);
 
             if (checkIfUserExist == true) {
                 if (checkPasswordsMatch == true) {
@@ -328,26 +331,27 @@ public class TCPEmailServer implements Runnable {
                     if (checkPasswordFormat == true) {
                         if (checkEmailFormat == true) {
 
-                            userManager.registerUser(username, password);
-                            emailManager.addEmail(username);
+                            userManager.registerUser(usernameReg, password);
+                            emailManager.addEmail(usernameReg);
+                            username = usernameReg;
                             jsonResponse = createStatusResponse(UserUtilities.REGISTER_SUCCESSFUL, "Registration Successful");
-                            log.info("User {} successfully registered with us ", username);
+                            log.info("User {} successfully registered with us ", usernameReg);
                         } else {
                             jsonResponse = createStatusResponse(UserUtilities.INVALID_EMAIL_FORMAT, "Username must be in email format with @ and e.g .com at the end");
-                            log.info("User {} failed registration", username);
+                            log.info("User {} failed registration", usernameReg);
                         }
                     } else {
                         jsonResponse = createStatusResponse(UserUtilities.INVALID_PASSWORD_FORMAT, "Password format must be 8 or more characters long, have at least 1 capital letter, 1 upper case and 1 special character");
-                        log.info("User {} failed registration", username);
+                        log.info("User {} failed registration", usernameReg);
                     }
 
                 } else {
                     jsonResponse = createStatusResponse(UserUtilities.PASSWORDS_DONT_MATCH, "Passwords dont match");
-                    log.info("User {} failed registration", username);
+                    log.info("User {} failed registration", usernameReg);
                 }
             } else {
                 jsonResponse = createStatusResponse(UserUtilities.USER_ALREADY_EXIST, "User already exist");
-                log.info("User {} failed registration", username);
+                log.info("User {} failed registration", usernameReg);
             }
         } else {
             jsonResponse = createStatusResponse(UserUtilities.INVALID, "Invalid");
