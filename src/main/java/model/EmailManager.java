@@ -21,7 +21,39 @@ public class EmailManager implements IEmailManager {
         bootstrapReceiverEmailList();
     }
 
-  
+    // Add
+
+    /**
+     * Adding an email to the sender hashmap and receiver hashmap based on username
+     * @param username is the username being added ask the key
+     * @return true if added and false if not added
+     */
+
+    public boolean addEmail(String username){
+
+        ArrayList<Email> emailList = new ArrayList<>();
+        ArrayList<Email> emailList2 = new ArrayList<>();
+
+
+        return add(username, emailList, emailList2);
+    }
+
+    /**
+     * Adding an email arraylist to the sender hashmap and receiver hashmap based on username
+     * @param username is the username being searched
+     * @param emailList is the arraylist being added to the senderHashmap
+     * @param emailList2 is the arraylist being added receiverHashMap
+     * @return true if added and fals eif not added
+     */
+    private boolean add(String username, ArrayList<Email> emailList, ArrayList<Email> emailList2){
+        boolean added = false;
+        if(!senderEmails.containsKey(username)) {
+            added = true;
+            senderEmails.put(username, emailList);
+            receiverEmails.put(username, emailList2);
+        }
+        return added;
+    }
    
 
 
