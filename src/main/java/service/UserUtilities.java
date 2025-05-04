@@ -16,11 +16,14 @@ public class UserUtilities {
 
     public static final String RETRIEVE_EMAILS = "RETRIEVE_EMAILS";
 
-    public static final String SEARCH_RETRIEVED_EMAILS = "SEARCH_RETRIEVED_EMAILS";
+    public static final String SEARCH_RECEIVED_EMAILS = "SEARCH_RECEIVED_EMAILS";
 
-    public static final String GET_CONTENT_RETRIEVED_EMAILS = "GET_CONTENT_RETRIEVED_EMAILS";
+    public static final String GET_CONTENT_RECEIVED_EMAILS = "GET_CONTENT_RECEIVED_EMAILS";
 
     public static final String GET_CONTENT_SENT_EMAIL = "GET_CONTENT_SENT_EMAIL";
+    public static final String GET_RECEIVED_EMAIL_BY_ID = "GET_RECEIVED_EMAIL_BY_ID";
+    public static final String GET_SENT_EMAIL_BY_ID = "GET_SENT_EMAIL_BY_ID";
+
 
 
     // Responses
@@ -61,6 +64,10 @@ public class UserUtilities {
     public static final String NON_NUMERIC_ID= "NON_NUMERIC_ID";
     public static final String EMAIL_ID_DOESNT_EXIST = "EMAIL_ID_DOESNT_EXIST";
 
+    public static final String EMPTY_SUBJECT = "EMPTY_SUBJECT";
+
+    public static final String EMAIL_ID_LESS_THAN_1 = "EMAIL_ID_LESS_THAN_1";
+    public static final String EMAIL_RETRIEVED_SUCCESSFULLY = "EMAIL_RETRIEVED_SUCCESSFULLY";
     public static final String GOODBYE = "GOODBYE";
 
 

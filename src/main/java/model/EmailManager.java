@@ -141,12 +141,12 @@ public class EmailManager implements IEmailManager {
     // retrieve emails for the logged in user
 
     /**
-     * Search for retrieved emails based on username
+     * Search for received emails based on username
      * @param username is the username being searched
      * @return an arraylist of retrieved emails
      */
 
-    public ArrayList<Email> searchForRetrievedEmails(String username){
+    public ArrayList<Email> searchForReceivedEmails(String username){
 
         ArrayList<Email> emails = receiverEmails.get(username);
 
@@ -158,13 +158,13 @@ public class EmailManager implements IEmailManager {
     // search for email based on subject
 
     /**
-     * Search for retrieved emails based on te subject and username
+     * Search for received emails based on te subject and username
      * @param username is the username being searched
      * @param subject is the subject being searched
      * @return an arraylist of retrieved emails based on username and subject
      */
 
-    public ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject){
+    public ArrayList<Email> searchForReceivedEmailsBasedOnSubject(String username, String subject){
 
         ArrayList<Email> retrievedEmails = new ArrayList<>();
 
@@ -191,7 +191,7 @@ public class EmailManager implements IEmailManager {
      * @return email that is found
      */
 
-    public Email getContentOfParticularReceivedEmail(String username, int emailId){
+    public Email getRecievedEmailBasedOnUsernameAndEmailId(String username, int emailId){
 
         ArrayList<Email> emails = receiverEmails.get(username);
 
@@ -243,7 +243,7 @@ public class EmailManager implements IEmailManager {
      * @return email that is found
      */
 
-    public Email getContentOfParticularSentEmail(String username, int emailId){
+    public Email getSenderEmailBasedOnUsernameAndEmailId(String username, int emailId){
 
         ArrayList<Email> emails = senderEmails.get(username);
 
@@ -285,6 +285,21 @@ public class EmailManager implements IEmailManager {
         return false;
     }
 
+
+    // check if id is less than 1
+
+    /**
+     * check if id is less than 1
+     * @param id is the id being searched
+     * @return true if greater than or equal to 1 and false if less than 1
+     */
+    public boolean checkIfIdIsLessThan1(int id){
+
+        if (id >= 1){
+            return true;
+        }
+        return false;
+    }
 
     private void bootstrapEmailList() {
         ArrayList<Email> email = new ArrayList();

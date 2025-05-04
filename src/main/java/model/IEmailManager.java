@@ -13,13 +13,14 @@ public interface IEmailManager {
 
      boolean checkIfEmailMatchRegex(String email);
 
-     ArrayList<Email> searchForRetrievedEmails(String username);
+     ArrayList<Email> searchForReceivedEmails(String username);
 
-     ArrayList<Email> searchForRetrievedEmailsBasedOnSubject(String username, String subject);
-     Email getContentOfParticularReceivedEmail(String username, int emailId);
+     ArrayList<Email> searchForReceivedEmailsBasedOnSubject(String username, String subject);
+     Email getRecievedEmailBasedOnUsernameAndEmailId(String username, int emailId);
      boolean checkIfReceivedEmailIdExist(String username, int id);
 
-      Email getContentOfParticularSentEmail(String username, int emailId);
+      Email getSenderEmailBasedOnUsernameAndEmailId(String username, int emailId);
       boolean checkIfSendEmailIdExist(String username, int id);
+      boolean checkIfIdIsLessThan1(int id);
 
 }
