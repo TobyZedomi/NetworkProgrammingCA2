@@ -21,8 +21,26 @@ public class EmailManager implements IEmailManager {
         bootstrapReceiverEmailList();
     }
 
-  
-   
+    // Add
+
+    public boolean addEmail(String email){
+
+        ArrayList<Email> emailList = new ArrayList<>();
+        ArrayList<Email> emailList2 = new ArrayList<>();
+
+
+        return add(email, emailList, emailList2);
+    }
+
+    private boolean add(String email, ArrayList<Email> emailList, ArrayList<Email> emailList2){
+        boolean added = false;
+        if(!senderEmails.containsKey(email)) {
+            added = true;
+            senderEmails.put(email, emailList);
+            receiverEmails.put(email, emailList2);
+        }
+        return added;
+    }
 
 
 
