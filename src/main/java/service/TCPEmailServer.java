@@ -127,17 +127,24 @@ public class TCPEmailServer implements Runnable {
                     int Id = Integer.parseInt(payload.get("Id").getAsString());
 
                     boolean checkIfEmailIdExist = emailManager.checkIfSendEmailIdExist(username, Id);
+                    boolean checkIdEntered = emailManager.checkIfIdIsLessThan1(Id);
+
 
                     Email email = emailManager.getContentOfParticularSentEmail(username, Id);
 
-                    if (checkIfEmailIdExist) {
+                    if (checkIdEntered) {
+                        if (checkIfEmailIdExist) {
 
-                        jsonResponse = createStatusResponseForContent(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeEmailContentOnly(email));
-                        log.info("User {} got content of email with the ID {} ", username, Id);
+                            jsonResponse = createStatusResponseForContent(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeEmailContentOnly(email));
+                            log.info("User {} got content of email with the ID {} ", username, Id);
 
-                    } else {
-                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
-                        log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
+                        } else {
+                            jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
+                            log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
+                        }
+                    }else {
+                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_LESS_THAN_1, "Email id cant be less than 1");
+                        log.info("User {} tried to get email with the ID but less than 1, ID was {} ", username, Id);
                     }
                 } catch (NumberFormatException ex) {
                     jsonResponse = createStatusResponse(UserUtilities.NON_NUMERIC_ID, "Id must be a number");
@@ -169,17 +176,23 @@ public class TCPEmailServer implements Runnable {
                     int Id = Integer.parseInt(payload.get("Id").getAsString());
 
                     boolean checkIfEmailIdExist = emailManager.checkIfReceivedEmailIdExist(username, Id);
+                    boolean checkIdEntered = emailManager.checkIfIdIsLessThan1(Id);
 
                     Email email = emailManager.getContentOfParticularReceivedEmail(username, Id);
 
-                    if (checkIfEmailIdExist) {
+                    if (checkIdEntered == true) {
+                        if (checkIfEmailIdExist) {
 
-                        jsonResponse = createStatusResponseForContent(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeEmailContentOnly(email));
-                        log.info("User {} got content of email with the ID {} ", username, Id);
+                            jsonResponse = createStatusResponseForContent(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeEmailContentOnly(email));
+                            log.info("User {} got content of email with the ID {} ", username, Id);
 
-                    } else {
-                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
-                        log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
+                        } else {
+                            jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_DOESNT_EXIST, "Email with this id doesnt exist");
+                            log.info("User {} tried to get email with the ID {} but it doesnt exist ", username, Id);
+                        }
+                    }else{
+                        jsonResponse = createStatusResponse(UserUtilities.EMAIL_ID_LESS_THAN_1, "Email id cant be less than 1");
+                        log.info("User {} tried to get email with the ID but less than 1, ID was {} ", username, Id);
 
                     }
                 } catch (NumberFormatException ex) {

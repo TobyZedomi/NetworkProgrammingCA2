@@ -1229,7 +1229,7 @@ public class TCPGUIClient {
         // Wait to receive a response to the authentication request
         String response = network.receive();
 
-        if (response.equalsIgnoreCase(AuthUtils.NON_NUMERIC_ID) || response.equalsIgnoreCase(AuthUtils.EMAIL_ID_DOESNT_EXIST) || response.equalsIgnoreCase(AuthUtils.INVALID) || response.equalsIgnoreCase(AuthUtils.NOT_LOGGED_IN)) {
+        if (response.equals(AuthUtils.NON_NUMERIC_ID) || response.equals(AuthUtils.EMAIL_ID_DOESNT_EXIST) || response.equals(AuthUtils.INVALID) || response.equals(AuthUtils.NOT_LOGGED_IN) || response.equals(AuthUtils.EMAIL_ID_LESS_THAN_1)) {
 
             JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
             String result1 = jsonResponse1.get("message").getAsString();
@@ -1274,7 +1274,7 @@ public class TCPGUIClient {
         // Wait to receive a response to the authentication request
         String response = network.receive();
 
-        if (response.equalsIgnoreCase(AuthUtils.NON_NUMERIC_ID) || response.equalsIgnoreCase(AuthUtils.EMAIL_ID_DOESNT_EXIST) || response.equalsIgnoreCase(AuthUtils.INVALID) || response.equalsIgnoreCase(AuthUtils.NOT_LOGGED_IN)) {
+        if (response.equals(AuthUtils.NON_NUMERIC_ID) || response.equals(AuthUtils.EMAIL_ID_DOESNT_EXIST) || response.equals(AuthUtils.INVALID) || response.equals(AuthUtils.NOT_LOGGED_IN) || response.equals(AuthUtils.EMAIL_ID_LESS_THAN_1)) {
 
             JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
             String result1 = jsonResponse1.get("message").getAsString();

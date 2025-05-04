@@ -63,6 +63,8 @@ public class UserUtilities {
 
     public static final String EMPTY_SUBJECT = "EMPTY_SUBJECT";
 
+    public static final String EMAIL_ID_LESS_THAN_1 = "EMAIL_ID_LESS_THAN_1";
+
     public static final String GOODBYE = "GOODBYE";
 
 

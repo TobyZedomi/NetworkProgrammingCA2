@@ -21,5 +21,6 @@ public interface IEmailManager {
 
       Email getContentOfParticularSentEmail(String username, int emailId);
       boolean checkIfSendEmailIdExist(String username, int id);
+      boolean checkIfIdIsLessThan1(int id);
 
 }

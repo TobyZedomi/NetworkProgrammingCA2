@@ -286,6 +286,21 @@ public class EmailManager implements IEmailManager {
     }
 
 
+    // check if id is less than 1
+
+    /**
+     * check if id is less than 1
+     * @param id is the id being searched
+     * @return true if greater than or equal to 1 and false if less than 1
+     */
+    public boolean checkIfIdIsLessThan1(int id){
+
+        if (id >= 1){
+            return true;
+        }
+        return false;
+    }
+
     private void bootstrapEmailList() {
         ArrayList<Email> email = new ArrayList();
 
