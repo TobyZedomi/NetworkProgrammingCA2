@@ -12,7 +12,7 @@ public class EmailManager implements IEmailManager {
     private Map<String, ArrayList<Email>> senderEmails = new ConcurrentHashMap<>();
     private Map<String, ArrayList<Email>> receiverEmails = new ConcurrentHashMap<>();
     private final Object emailCountLock = new Object();
-    private static int emailIdCount = 0;
+    private static int emailIdCount = 1;
 
     public EmailManager() {
 
@@ -26,16 +26,18 @@ public class EmailManager implements IEmailManager {
     public boolean addEmail(String email){
 
         ArrayList<Email> emailList = new ArrayList<>();
+        ArrayList<Email> emailList2 = new ArrayList<>();
 
-        return add(email, emailList);
+
+        return add(email, emailList, emailList2);
     }
 
-    private boolean add(String email, ArrayList<Email> emailList){
+    private boolean add(String email, ArrayList<Email> emailList, ArrayList<Email> emailList2){
         boolean added = false;
         if(!senderEmails.containsKey(email)) {
             added = true;
             senderEmails.put(email, emailList);
-            receiverEmails.put(email, emailList);
+            receiverEmails.put(email, emailList2);
         }
         return added;
     }
@@ -97,15 +99,9 @@ public class EmailManager implements IEmailManager {
 
     public ArrayList<Email> searchForRetrievedEmails(String username){
 
-        ArrayList<Email> retrievedEmails = new ArrayList<>();
+        ArrayList<Email> emails = receiverEmails.get(username);
 
-        ArrayList<Email> email = receiverEmails.get(username);
-
-                for (int i = 0; i < email.size(); i++) {
-
-                    retrievedEmails.add(email.get(i));
-                }
-        return retrievedEmails;
+        return emails;
     }
 
 

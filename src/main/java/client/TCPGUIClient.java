@@ -1104,10 +1104,6 @@ public class TCPGUIClient {
 
         // Wait to receive a response to the authentication request
         String response = network.receive();
-
-
-
-
         if (response.equalsIgnoreCase(AuthUtils.NO_EMAILS_WITH_THIS_SUBJECT) || response.equals(AuthUtils.INVALID) || response.equals(AuthUtils.YOU_HAVE_NO_EMAILS) || response.equals(AuthUtils.NOT_LOGGED_IN)) {
 
             JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
