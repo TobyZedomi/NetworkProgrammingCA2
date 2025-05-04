@@ -131,7 +131,7 @@ public class TCPEmailServer implements Runnable {
 
                     if (checkIfEmailIdExist){
 
-                        jsonResponse = createStatusResponseForContent(serializeEmailContentOnly(email));
+                        jsonResponse = createStatusResponseForContent(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeEmailContentOnly(email));
                         log.info("User {} got content of email with the ID {} ", username, Id);
 
                     }else{
@@ -173,7 +173,7 @@ public class TCPEmailServer implements Runnable {
 
                     if (checkIfEmailIdExist){
 
-                        jsonResponse = createStatusResponseForContent(serializeEmailContentOnly(email));
+                        jsonResponse = createStatusResponseForContent(UserUtilities.EMAIL_CONTENT_RETRIEVED_SUCCESSFULLY, serializeEmailContentOnly(email));
                         log.info("User {} got content of email with the ID {} ", username, Id);
 
                     }else{
@@ -405,14 +405,13 @@ public class TCPEmailServer implements Runnable {
 
 
     public JsonObject serializeEmails(ArrayList<Email> emails) {
-
         JsonObject jsonResponse = null;
 
         StringJoiner joiner = new StringJoiner(UserUtilities.EMAIL_DELIMITER2);
 
         for (Email e : emails) {
             joiner.add(serializeEmail(e));
-            jsonResponse = createStatusResponse2(joiner.toString());
+            jsonResponse = createStatusResponse2(UserUtilities.EMAILS_RETRIEVED_SUCCESSFULLY, joiner.toString());
         }
         return jsonResponse;
     }
@@ -437,14 +436,16 @@ public class TCPEmailServer implements Runnable {
         return invalidResponse;
     }
 
-    private JsonObject createStatusResponse2(String emails) {
+    private JsonObject createStatusResponse2(String status, String emails) {
         JsonObject invalidResponse = new JsonObject();
+        invalidResponse.addProperty("status", status);
         invalidResponse.addProperty("emails", emails);
         return invalidResponse;
     }
 
-    private JsonObject createStatusResponseForContent(String content) {
+    private JsonObject createStatusResponseForContent(String status, String content) {
         JsonObject invalidResponse = new JsonObject();
+        invalidResponse.addProperty("status", status);
         invalidResponse.addProperty("content", content);
         return invalidResponse;
     }

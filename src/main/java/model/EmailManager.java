@@ -103,6 +103,12 @@ public class EmailManager implements IEmailManager {
 
     // check if receiver exist
 
+    /**
+     * Checking is receiver username has a received email key in the hashmap
+     * @param receiver is the username being searched
+     * @return true if exists in hashmap and false if it doesn't exist
+     */
+
     public boolean checkIfReceiverExist(String receiver){
         boolean match = false;
         if(receiverEmails.containsKey(receiver)) {
