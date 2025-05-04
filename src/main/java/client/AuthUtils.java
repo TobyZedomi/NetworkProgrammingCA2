@@ -24,6 +24,8 @@ public class AuthUtils {
 
     public static final String GET_SENT_EMAIL_BY_ID = "GET_SENT_EMAIL_BY_ID";
 
+    public static final String EXIT = "EXIT";
+
 
     // RESPONSES
 

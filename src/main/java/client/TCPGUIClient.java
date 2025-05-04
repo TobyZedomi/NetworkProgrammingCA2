@@ -246,6 +246,23 @@ public class TCPGUIClient {
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                // Create the overall request object
+                JsonObject requestJson = new JsonObject();
+                // Add the request type/action and payload
+                requestJson.addProperty("action", AuthUtils.EXIT);
+
+                String request = gson.toJson(requestJson);
+                network.send(request);
+
+                // Wait to receive a response to the authentication request
+                String response = network.receive();
+
+                JsonObject jsonResponse1 = gson.fromJson(response, JsonObject.class);
+                String result1 = jsonResponse1.get("message").getAsString();
+
+                JOptionPane.showMessageDialog(initialView, result1, "Exiting System",
+                        JOptionPane.INFORMATION_MESSAGE);
+
                 try {
                     network.disconnect();
                 } catch (IOException ex) {
@@ -1025,20 +1042,6 @@ public class TCPGUIClient {
             passwordField.setText("");
 
             return;
-        }
-
-        if (response.equals(AuthUtils.GOODBYE)){
-
-            JOptionPane.showMessageDialog(initialView, result, "GoodBye",
-                    JOptionPane.ERROR_MESSAGE);
-            try {
-                network.disconnect();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            System.out.println("Shutting down...");
-            // Shut down the application fully
-            System.exit(0);
         }
 
         JOptionPane.showMessageDialog(initialView, result, "Login Failed",
